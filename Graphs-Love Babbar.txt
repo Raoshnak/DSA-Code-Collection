@@ -1,0 +1,798 @@
+1. Cycle Detection In Undirected Graph
+
+Approach-1 (Using BFS)
+
+from collections import deque
+def isCycle(vertex, graph, visited, parent):
+    visited[vertex] = True
+    q = deque()
+    q.append(vertex)
+    while len(q):
+        remVertex = q[-1]
+        q.pop()
+        for i in graph[remVertex]:
+            if (visited[i] == False):
+                visited[i] = True
+                q.append(i)
+                parent[i] = remVertex
+            elif (visited[i] == True and parent[remVertex] != i):
+                return True
+    return False
+def cycleDetection(edges, n, m):
+    graph = [[] for i in range(n + 1)]
+    for i in range(m):
+        graph[edges[i][1]].append(edges[i][0])
+        graph[edges[i][0]].append(edges[i][1])
+    visited = [False] * (n + 1)
+    parent = [-1] * (n + 1)
+    for i in range(n + 1):
+        if (visited[i] == False):
+            if (isCycle(i, graph, visited, parent) == True):
+                return "Yes"
+    return "No"
+
+Approach-2 (Using DFS)
+
+def isCycle(vertex, graph, visited, parent):
+    visited[vertex] = True
+    for i in graph[vertex]:
+        if (visited[i] == False):
+            if (isCycle(i, graph, visited, vertex) == True):
+                return True
+        elif(i != parent):
+            return True
+    return False
+def cycleDetection(edges, n, m):
+    graph = [[] for i in range(n + 1)]
+    for i in range(m):
+        graph[edges[i][1]].append(edges[i][0])
+        graph[edges[i][0]].append(edges[i][1])
+    visited = [False] * (n + 1)
+    parent = [-1] * (n + 1)
+    for i in range(n + 1):
+        if (visited[i] == False):
+            if (isCycle(i, graph, visited, parent) == True):
+                return "Yes"
+    return "No"
+
+Approach-3(Union-Rank Algo)
+
+def findparent(i, parent):
+    if (i == parent[i]):
+        return i
+    parent[i] = findparent(parent[i], parent)
+    return parent[i]
+def cycleDetection(edges, n, m):
+    parent = [0] * (n + 1)
+    rank = [0] * (n + 1)
+    for i in range(n + 1):
+        rank[i] = 1
+        parent[i] = i
+    for ar in edges:
+        u = ar[0]
+        v = ar[1]
+        p1 = findparent(u, parent)
+        p2 = findparent(v, parent)
+        if (p1 != p2):
+            if (rank[p1] < rank[p2]):
+                parent[p1] = p2
+            elif (rank[p1] > rank[p2]):
+                parent[p2] = p1
+            else:
+                parent[p1] = p2
+                rank[p2] += 1
+        else:
+            return "Yes"
+    return "No"
+                
+2. Topological Sort
+
+Approach-1 (DFS)
+
+from collections import defaultdict
+def topologicalSortUtil(adj, visited, stack, src):
+    visited[src] = True
+    for node in adj[src]:
+        if visited[node] == 0:
+            topologicalSortUtil(adj, visited, stack, node)
+    stack.append(src)
+def topologicalSort(edges, v, e):
+    adj = defaultdict(list)
+    for i in range(0, e):
+        adj[edges[i][0]].append(edges[i][1])
+    visited = [0] * v
+    stack = []
+    for i in range(0, v):
+        if (visited[i] == 0):
+            topologicalSortUtil(adj, visited, stack, i)
+    result = []
+    while (len(stack) != 0):
+        result.append(stack.pop())
+    return result
+                         
+
+Approach-2(Kahn's Algorithm)
+
+from collections import defaultdict
+def topologicalSort(edges, v, e):
+    adj = defaultdict(list)
+    for i in range(0, e):
+        adj[edges[i][0]].append(edges[i][1])
+    indegree = [0] * v
+    for i in range(0, e):
+        indegree[edges[i][1]] += 1
+    queue = []
+    for i in range(0, v):
+        if (indegree[i] == 0):
+            queue.append(i)
+    result = []
+    while (len(queue) != 0):
+        src = queue.pop()
+        result.append(src)
+        for node in adj[src]:
+            indegree[node] -= 1
+            if indegree[node] == 0:
+                queue.append(node)
+    return result
+
+3. Shortest path in an unweighted graph
+
+from queue import Queue 
+def shortestPath(edges, n, m, s, t):
+    adj = [[] for i in range(n + 1)]
+    for i in range(m):
+        X = edges[i][0]
+        Y = edges[i][1]
+        adj[X].append(Y)
+        adj[Y].append(X)
+    visited = [-1] * (n + 1)
+    parent = [-1] * (n + 1)
+    visited[s] = 1
+    Q = Queue()
+    Q.put(s)
+    while (Q.qsize() > 0):
+        currentNode = Q.get()
+        for nextNode in adj[currentNode]:
+            if visited[nextNode] == -1:
+                visited[nextNode] = 1
+                Q.put(nextNode)
+                parent[nextNode] = currentNode
+    path = []
+    currentNode = t
+    path.append(t)
+    while (currentNode != s):
+        currentNode = parent[currentNode]
+        path.append(currentNode)
+    path.reverse()
+    return path
+
+4. Detect Cycle In A Directed Graph
+
+from collections import defaultdict
+ 
+class Graph():
+
+    def __init__(self, nodes):
+
+        # Array containing adjacency lists.
+        self.adj = defaultdict(list)
+        # Number of Nodes.
+        self.noOfNodes = nodes
+ 
+    # To add an edge to between two nodes in a Graph.
+    def addEdge(self, u, v):
+        self.adj[u].append(v)
+ 
+    # Helper function for checkCyclic().
+    def isCyclicUtil(self, v, checkVisited, recStack):
+ 
+        # Make the current node as visited and part of recursion stack.
+        checkVisited[v] = True
+        recStack[v] = True
+ 
+        # Recur for all the nodes adjacent to this node.
+        for neighbour in self.adj[v]:
+            if checkVisited[neighbour] == False:
+                if self.isCyclicUtil(neighbour, checkVisited, recStack) == True:
+                    return True
+            elif recStack[neighbour] == True:
+                return True
+ 
+        # Remove the vertex from recursion stack.
+        recStack[v] = False
+        return False
+ 
+    # Returns true if there exists a cycle in the given graph.
+    def isCyclic(self):
+
+        '''
+            Initialise checkVisited as false i.e.
+            nodes are not visited yet. 
+        '''
+        checkVisited = [False] * (self.noOfNodes + 1)
+
+        # Initialise nodes as not a part of recursion stack.
+        recStack = [False] * (self.noOfNodes + 1)
+
+        ''' 
+            Call the recursive helper function to detect cycle 
+            in different DFS trees. 
+        '''
+        
+        for node in range(self.noOfNodes):
+            if checkVisited[node] == False:
+                if self.isCyclicUtil(node,checkVisited,recStack) == True:
+                    return True
+        return False
+
+
+def detectCycleInDirectedGraph(n, edges):
+    
+    directedG = Graph(n)
+
+    m = len(edges)
+
+    for i in range(m):
+        directedG.addEdge(edges[i][0]- 1, edges[i][1] - 1)
+
+    return directedG.isCyclic()
+
+5. Dijkstra's shortest path
+
+Approach-1 (Using Adjacency Matrix)
+
+import sys
+def minDistance(distance, visited, vertices):
+    min = float('inf')
+    minVertex = 0
+    for v in range(vertices):
+        if (visited[v] == False and distance[v] <= min):
+            min = distance[v]
+            minVertex = v
+    return minVertex
+def solve(matrix, vertices, source):
+    distance = [2147483647] * vertices
+    visited = [False] * vertices
+    distance[source] = 0
+    for i in range(vertices):
+        u = minDistance(distance, visited, vertices)
+        visited[u] = True
+        for v in range(vertices):
+            if (not visited[v] and matrix[u][v] and distance[u] != 2147483647 and distance[u] + matrix[u][v] < distance[v]):
+                distance[v] = distance[u] + matrix[u][v]
+    return distance
+def dijkstra(vec, vertices, edges, source):
+    matrix = [[0 for i in range(vertices)] for j in range(vertices)]
+    for i in range(len(vec)):
+        u = vec[i][0]
+        v = vec[i][1]
+        w = vec[i][2]
+        if (matrix[u][v] != 0):
+            matrix[u][v] = min(matrix[u][v], w)
+            matrix[v][u] = min(matrix[v][u], w)
+        else:
+            matrix[u][v] = w
+            matrix[v][u] = w
+    return solve(matrix, vertices, source)
+            
+Time complexity: O(V^2)
+Space complexity: O(V^2)    
+
+Approach-2 (Using Adjacency List)
+
+import sys
+import heapq
+
+
+def dijkstraHelper(adjacencyList, vertices, source):
+    pq = []
+    distance = [2147483647 for i in range(vertices)]
+
+    # Push the source vertex in the priority queue.
+    pq.append([0, source])
+
+    # Distance of a vertex to itself is 0.
+    distance[source] = 0
+    visited = [False for i in range(vertices)]
+
+    # Loop till all vertices are visited.
+    while (len(pq) > 0):
+        pair = heapq.heappop(pq)
+        u = pair[1]
+        visited[u] = True
+
+        # Update the distances of the adjacent nodes.
+        for it in adjacencyList[u]:
+            v = it[0]
+            dist = it[1]
+
+            if (visited[v] == False and distance[v] > distance[u] + dist):
+                distance[v] = distance[u] + dist
+                heapq.heappush(pq, (distance[v], v))
+
+    return distance
+
+
+def dijkstra(vec, vertices, edges, source):
+    adjacencyList = [[] for j in range(vertices)]
+    
+    # Create an adjacency list.
+    for i in range(len(vec)):
+        adjacencyList[vec[i][0]].append([vec[i][1], vec[i][2]])
+        adjacencyList[vec[i][1]].append([vec[i][0], vec[i][2]])
+
+    return dijkstraHelper(adjacencyList, vertices, 0)
+
+6. Prim's MST
+
+Approach-1 (Prim's Algorithm)
+
+import sys
+
+def findMinKey(minEdgeCut, includedMST, n):
+    
+    # Initialize min value.
+    mn  = sys.maxsize
+    min_index = -1
+    
+    for v in range(n):
+        
+        if includedMST[v] == False and minEdgeCut[v] < mn:
+            
+            mn = minEdgeCut[v]
+            min_index = v
+            
+    return min_index
+    
+def calculatePrimsMST(n, m, g):
+    
+    graph = [[0 for _ in range(n)] for _ in range(n)] 
+    
+    for i in range(len(g)):
+        
+        graph[(g[i][0] - 1)][(g[i][1] - 1)] = g[i][2]
+        graph[(g[i][1] - 1)][(g[i][0] - 1)] = g[i][2]
+        
+    # Array to store constructed MST.
+    parent = []
+    
+    # Key values used to pick minimum weight edge in cut.
+    minEdgeCut = []
+    
+    # To represent set of vertices included in MST.
+    includedMST = []
+    
+    # Initialize all keys as INFINITE.
+    for i in range(n):
+        minEdgeCut.append(sys.maxsize)
+        includedMST.append(False)
+        parent.append(i)
+        
+    # Always include first 1st vertex in MST and Make key 0 so that this vertex is picked as first vertex.
+    minEdgeCut[0] = 0
+    
+    # First node is always root of MST.
+    parent[0] = -1
+    
+    # The MST will have n vertices.
+    for count in range(n-1):
+        # Pick the minimum key vertex from the set of vertices not yet included in MST.
+        u = findMinKey(minEdgeCut, includedMST, n)
+        
+        # Add the picked vertex to the MST Set.
+        includedMST[u] = True
+        
+        # Consider only those vertices which are not yet included in MST.
+        for v in range(n):
+            
+            if graph[u][v] != 0 and includedMST[v] == False and graph[u][v] < minEdgeCut[v]:
+                
+                parent[v] = u
+                minEdgeCut[v] = graph[u][v]
+                
+    result = []
+    
+    for i in range(1, n):
+        
+        result.append([(parent[i] + 1), (i + 1), (minEdgeCut[i])])
+        
+    return result
+
+Approach-2 (Prim’s Algorithm using heap)
+
+import sys
+import heapq
+def primsMST(adjList, n):
+    # Min Heap
+    pq = []
+    src = 0
+    weight = [sys.maxsize] * n
+    parent = [-1] * n
+    inMST = [False] * n
+    inMST[src] = True
+    heapq.heappush(pq, (0, -src))
+    weight[src] = 0
+    while (len(pq) > 0):
+        u = -heapq.heappop(pq)[1]
+        inMST[u] = True
+        for (a,b) in adjList[u]:
+            v = a
+            wt = b
+            if not inMST[v] and weight[v] > wt:
+                weight[v] = wt
+                heapq.heappush(pq, (weight[v], -v))
+                parent[v] = u
+    result = []
+    for i in range(1, n):
+        result.append([(parent[i] + 1), (i + 1), (weight[i])])
+    return result
+def calculatePrimsMST(n, m, g):
+    graph = [[] for _ in range(n)] 
+    
+    for i in range(m):
+        
+        graph[(g[i][0] - 1)].append(( (g[i][1] - 1), g[i][2] ))
+        graph[(g[i][1] - 1)].append(( (g[i][0] - 1), g[i][2] ))
+        
+    return primsMST(graph, n)
+   
+7. Minimum Spanning Tree
+
+Approach-1 (Krushkal's Algorithm)
+
+from sys import stdin,setrecursionlimit
+setrecursionlimit(10**7)
+
+
+
+# Edge class for storing the Edges of thee graph
+class Edge:
+    
+    def __init__(self, start, end, weight) :
+
+        self.start = start
+        self.end = end
+        self.weight = weight
+
+def findSet(parent, node):
+    if (node == parent[node]):
+        return node
+    # path compression
+    parent[node] = findSet(parent, parent[node])
+    return parent[node]
+def unionSet(parent, rank, set1, set2):
+    set1 = findSet(parent, set1)
+    set2 = findSet(parent, set2)
+    if (set1 != set2):
+        if (rank[set1] < rank[set2]):
+            temp = set1
+            set1 = set2
+            set2 = temp
+        parent[set2] = set1
+        if (rank[set1] == rank[set2]):
+            rank[set1] += 1
+def minimumSpanningTree(edges, V, E):
+    edges.sort(key = lambda temp : temp.weight)
+    finalWeight = 0
+    parent = [i for i in range(V)]
+    rank = [0 for i in range(V)]
+    for i in range(len(edges)):
+        set1 = findSet(parent, edges[i].start)
+        set2 = findSet(parent, edges[i].end)
+        if (set1 != set2):
+            finalWeight += edges[i].weight
+            unionSet(parent, rank, set1, set2)
+    return finalWeight
+
+8. Bridges in a Graph
+
+Time Complexity : O(V + E)
+Space Complexity : O(V)
+
+time = 0
+
+def dfs(graph, allBridges, visited, dis, low, parent, currentVertex):
+    #Current node as visited
+    visited[currentVertex] = True
+    global time
+    time += 1
+    low[currentVertex] = dis[currentVertex] = time
+    #Child is the current adjacent vertex
+    for child in graph[currentVertex]:
+        if not visited[child]:
+            dfs(graph, allBridges, visited, dis, low, currentVertex, child)
+            #update the low
+            low[currentVertex] = min(low[child], low[currentVertex])
+            if low[child] > dis[currentVertex]:
+                edge = [0] * 2
+                edge[0] = currentVertex
+                edge[1] = child
+                allBridges.append(edge)
+        elif child != parent:
+            low[currentVertex] = min(low[currentVertex], dis[child])
+                
+#Function to add edge
+def addedge(graph, a, b):
+    graph[a].append(b)
+    graph[b].append(a)
+    
+def findBridges(edges, v, e):
+    graph = [[] for i in range(v)]
+    
+    #Adding edges to the graph
+    for i in range(e):
+        a = edges[i][0]
+        b = edges[i][1]
+        addedge(graph, a, b)
+    global time
+    time = 0
+    visited = [0] * v
+    #Store discovery time of each node
+    dis = [0] * v
+    # Store the earliest discovery time of each node
+    low = [0] * v
+    allBridges = []
+    for i in range(v):
+        if not visited[i]:
+            dfs(graph, allBridges, visited, dis, low, -1, i)
+    return allBridges
+    
+9. Count Strongly Connected Components (Kosaraju’s Algorithm)
+
+Time complexity: O(V + E)
+Space complexity: O(V + E)
+
+def dfs(u, graph, visited):
+    if(visited[u] == True):
+        # Current node is already visited. So, return.
+        return
+
+    # Current node has not be explored before. So, mark it visited.
+    visited[u] = True
+
+    # Traverse the adjacent nodes.
+    edges = len(graph[u])
+
+    for i in range(edges):
+        v = graph[u][i]
+        dfs(v, graph, visited)
+
+    return
+
+
+def getTranspose(vertices, graph):
+    transposeGraph = [[] for i in range(vertices)]
+
+    # Generate the transpose of the given graph by reversing the direction of every edge.
+    for i in range(vertices):
+        edges = len(graph[i])
+        for j in range(edges):
+            u = graph[i][j]
+            transposeGraph[u].append(i)
+
+    return transposeGraph
+
+
+def dfsToFindFinishTime(u, graph, visited, stk):
+    if(visited[u] == True):
+        # Current node is already visited. So, return.
+        return
+
+    # Current node has not be explored before. So, mark it visited.
+    visited[u] = True
+
+    # Traverse the adjacent nodes.
+    edges = len(graph[u])
+
+    for i in range(edges):
+        v = graph[u][i]
+        dfsToFindFinishTime(v, graph, visited, stk)
+
+    # Exploration of current node is complete. So, push it in the stack.
+    stk.append(u)
+
+    return
+
+
+def stronglyConnectedComponents(v, edges):
+    # Create adjacency list for the graph.
+    graph = [[] for i in range(v)]
+
+    e = len(edges)
+    for i in range(e):
+        a = edges[i][0]
+        b = edges[i][1]
+
+        graph[a].append(b)
+
+    # Create an empty stack to store the vertices in descending order of their finished time.
+    stk = []
+
+    # Create a visited array to keep track of the vertices visited during DFS.
+    visited = [False for i in range(v)]
+
+    # Apply DFS to determine the finish time of all the vertices.
+    for i in range(v):
+        if(visited[i] == False):
+            dfsToFindFinishTime(i, graph, visited, stk)
+
+    # Get the tranpose of the given graph.
+    transposeGraph = getTranspose(v, graph)
+
+    # Mark all the vertices as unvisited.
+    for i in range(v):
+        visited[i] = False
+
+    # Create a variable to store the number of connected components in the graph.
+    count = 0
+
+    # Visit all the SCCs one by one.
+    while(len(stk) > 0):
+        node = stk[-1]
+        stk.pop()
+
+        if(visited[node] == False):
+            dfs(node, transposeGraph, visited)
+
+            # Traversed a SCC. So, increment the count by one.
+            count += 1
+
+    return count
+
+10. Bellman Ford's Algorithm
+
+Time complexity: O(N * M)
+Space complexity: O(N)
+
+def bellmonFord(n, m, src, dest, edges):
+    #Create an array to store the distance from the source
+
+    d = [1000000000 for i in range(n + 1)]
+    d[src] = 0
+    for i in range(1, n):
+        for j in range(m):
+            u = edges[j][0] 
+            v = edges[j][1] 
+            w = edges[j][2]
+            
+            if (d[u] != 1000000000 and d[v] > (d[u] + w)):
+                d[v] = d[u] + w
+    return d[dest]
+
+To detect cycles just use a flag variable and assign it zero and if cycle is present then assign it as 1 
+If flag == 0 then return flag[dest]
+else return -1
+
+11. Articulation points in a graph
+
+Time complexity: O(N + E)
+Space complexity: O(N)
+
+# Python program to find articulation points in an undirected graph
+
+from collections import defaultdict
+
+# This class represents an undirected graph
+# using adjacency list representation
+class Graph:
+
+	def __init__(self, vertices):
+		self.V = vertices # No. of vertices
+		self.graph = defaultdict(list) # default dictionary to store graph
+		self.Time = 0
+
+	# function to add an edge to graph
+	def addEdge(self, u, v):
+		self.graph[u].append(v)
+		self.graph[v].append(u)
+
+	'''A recursive function that find articulation points
+	using DFS traversal
+	u --> The vertex to be visited next
+	visited[] --> keeps track of visited vertices
+	disc[] --> Stores discovery times of visited vertices
+	parent[] --> Stores parent vertices in DFS tree
+	ap[] --> Store articulation points'''
+	def APUtil(self, u, visited, ap, parent, low, disc):
+
+		# Count of children in current node
+		children = 0
+
+		# Mark the current node as visited and print it
+		visited[u]= True
+
+		# Initialize discovery time and low value
+		disc[u] = self.Time
+		low[u] = self.Time
+		self.Time += 1
+
+		# Recur for all the vertices adjacent to this vertex
+		for v in self.graph[u]:
+			# If v is not visited yet, then make it a child of u
+			# in DFS tree and recur for it
+			if visited[v] == False :
+				parent[v] = u
+				children += 1
+				self.APUtil(v, visited, ap, parent, low, disc)
+
+				# Check if the subtree rooted with v has a connection to
+				# one of the ancestors of u
+				low[u] = min(low[u], low[v])
+
+				# u is an articulation point in following cases
+				# (1) u is root of DFS tree and has two or more children.
+				if parent[u] == -1 and children > 1:
+					ap[u] = True
+
+				#(2) If u is not root and low value of one of its child is more
+				# than discovery value of u.
+				if parent[u] != -1 and low[v] >= disc[u]:
+					ap[u] = True
+					
+				# Update low value of u for parent function calls
+			elif v != parent[u]:
+				low[u] = min(low[u], disc[v])
+
+
+	# The function to do DFS traversal. It uses recursive APUtil()
+	def AP(self):
+
+		# Mark all the vertices as not visited
+		# and Initialize parent and visited,
+		# and ap(articulation point) arrays
+		visited = [False] * (self.V)
+		disc = [float("Inf")] * (self.V)
+		low = [float("Inf")] * (self.V)
+		parent = [-1] * (self.V)
+		ap = [False] * (self.V) # To store articulation points
+
+		# Call the recursive helper function
+		# to find articulation points
+		# in DFS tree rooted with vertex 'i'
+		for i in range(self.V):
+			if visited[i] == False:
+				self.APUtil(i, visited, ap, parent, low, disc)
+
+		for index, value in enumerate (ap):
+			if value == True: print (index,end=" ")
+
+# Create a graph given in the above diagram
+g1 = Graph(5)
+g1.addEdge(1, 0)
+g1.addEdge(0, 2)
+g1.addEdge(2, 1)
+g1.addEdge(0, 3)
+g1.addEdge(3, 4)
+
+print ("\nArticulation points in first graph ")
+g1.AP()
+
+g2 = Graph(4)
+g2.addEdge(0, 1)
+g2.addEdge(1, 2)
+g2.addEdge(2, 3)
+print ("\nArticulation points in second graph ")
+g2.AP()
+
+
+g3 = Graph (7)
+g3.addEdge(0, 1)
+g3.addEdge(1, 2)
+g3.addEdge(2, 0)
+g3.addEdge(1, 3)
+g3.addEdge(1, 4)
+g3.addEdge(1, 6)
+g3.addEdge(3, 5)
+g3.addEdge(4, 5)
+print ("\nArticulation points in third graph ")
+g3.AP()
+
+# This code is contributed by Neelam Yadav
+
+	
+
+
+
+
+
+    

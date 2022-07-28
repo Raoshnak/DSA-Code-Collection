@@ -1,0 +1,1644 @@
+username-raoshnak0201
+pswd-z2SFSB7T
+1.try:
+    def bubblesort(A,n):
+        count = 0
+        for i in range(len(A)):
+            for j in range(n-i-1):
+                if A[j] > A[j+1]:
+                    A[j],A[j+1] = A[j+1],A[j]
+                    count+=1
+        print(count)
+    for i in range(int(input())):
+        n = int(input())
+        ar = list(map(int,input().split()))
+        bubblesort(ar,n)
+except:
+    pass
+2.def selectionSort(arr, n):
+    for i in range(n-1,0,-1):
+        maxIndex = i
+        
+        for j in range (i-1,-1,-1):
+            if arr[j] >= arr[maxIndex]:
+                maxIndex = j
+            
+        arr[maxIndex] , arr[i]=arr[i] , arr[maxIndex]
+        print(maxIndex,end=" ")
+    print()
+        
+for i in range(int(input())):
+    n = int(input())
+    ar = list(map(int,input().split()))
+    selectionSort(ar,n)  
+3.def InsertionSort(arr, n):
+    for i in range(1,n):
+        ele = arr[i]
+        j = i - 1
+
+        while j>-1 and ele < arr[j]:
+            arr[j + 1] = arr[j]
+            j = j - 1
+        arr[j + 1] = ele
+        print(j + 1,end=" ")
+    print()
+        
+for i in range(int(input())):
+    n = int(input())
+    ar = list(map(int,input().split()))
+    InsertionSort(ar,n)  
+4.class Solution(object):
+    def merge(self, nums1, m, nums2, n):
+        i = m - 1
+        j = n - 1
+        k = m + n - 1
+        
+        while i >= 0 and j >= 0:
+            if nums1[i] < nums2[j]:
+                nums1[k] = nums2[j]
+                j = j - 1
+            else:
+                nums1[k] = nums1[i]
+                i = i - 1
+            k = k - 1
+        
+        if j >= 0:
+            nums1[:k+1] = nums2[:j+1]
+        
+        return nums1
+5.def reverseArray(arr, m):
+    # Write your code here.
+    s = m + 1
+    e = len(arr) - 1
+    while s <= e:
+        arr[s], arr[e] = arr[e], arr[s]
+        s+=1
+        e-=1
+    return arr
+    pass
+6.class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        i = 0
+        n = len(nums)
+        for j in range(n):
+            if nums[j]!=0:
+                nums[i], nums[j] = nums[j], nums[i]
+                i+=1
+        
+7.class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n = len(nums)
+        temp = [0] * n
+        for i in range(n):
+            temp[(i + k) % n] = nums[i]
+        for j in range(n):
+            nums[j] = temp[j]
+8. Check if the array is sorted and rotated
+	class Solution:
+    def check(self, nums: List[int]) -> bool:
+        cnt = 0
+        for i in range(1,len(nums)):
+            if nums[i] < nums[i-1]:
+                cnt+=1
+        if nums[len(nums)-1] > nums[0]:
+            cnt+=1
+        return cnt<=1
+9.Sum Of Two Arrays
+1. The length of each array is greater than zero.
+
+2. The first index of each array is the most significant digit of the number. For example, if the array A[] = {4, 5, 1}, then the integer represented by this array is 451 and array B[] = {3, 4, 5} so the sum will be 451 + 345 = 796. So you need to return {7, 9, 6}.
+
+3. Both numbers do not have any leading zeros in them. And subsequently, the sum should not contain any leading zeros.
+
+
+
+def reverse(arr):
+    s = 0
+    e = len(arr) - 1
+    while (s < e):
+        arr[s], arr[e] = arr[e], arr[s]
+        s+=1
+        e-=1
+	return arr
+def findArraySum(a, n, b, m):
+    # Write your code here.
+    i = n - 1
+    j = m - 1
+    k = n - 1
+    carry = 0
+    sum = 0
+    ans = [0] * n
+    while(i >=0 and j >=0):
+        val1 = a[i]
+        val2 = b[j]
+        sum = val1 + val2 + carry
+        carry = sum//10
+        sum = sum%10
+        ans[k] = sum
+        i-=1
+        j-=1
+        k-=1
+ 	while(i>=0):
+    	sum = a[i] + carry
+        carry = sum//10
+        sum = sum%10
+        ans[k] = sum
+        i-=1;
+        k-=1
+ 	while(j>=0):
+        sum = b[j] + carry
+        carry = sum//10
+        sum = sum%10
+        ans[k] = sum
+        j-=1;
+        k-=1
+ 	while(carry != 0):
+    	sum = carry
+        carry = sum//10
+        sum = sum%10
+        ans[k] = sum
+  	return reverse(ans)
+
+10.Sum of Pairs
+def mergesort(arr,n,low,high):
+    mid = (low + high)//2
+    if low == high:
+        return 0
+    else:
+        mergesort(arr,n,low,mid)
+        mergesort(arr,n,mid+1,high)
+        merge(arr,n,low,mid,high)
+def merge(arr,n,low,mid,high):
+    p1 = low
+    p2 = mid + 1
+    k = 0
+    m = high - low + 1
+    temp = [0] * m
+    while((p1<=mid) and (p2<=high)):
+        if(arr[p1]<=arr[p2]):
+            temp[k] = arr[p1]
+            k+=1
+            p1+=1
+        else:
+            temp[k] = arr[p2]
+            k+=1
+            p2+=1
+    while(p1<=mid):
+        temp[k] = arr[p1]
+        k+=1
+        p1+=1
+    while(p2<=high):
+        temp[k] = arr[p2]
+        k+=1
+        p2+=1
+    for i in range(high-low+1):
+        arr[low + i] = temp[i]
+def sumofpairs(arr,n,k):
+    p1 = 0
+    p2 = n - 1
+    while(p1 < p2):
+        sum = 0
+        sum = arr[p1] + arr[p2]
+        if(sum < k):
+            p1+=1
+        elif(sum > k):
+            p2-=1
+        else:
+            return True
+    return False
+for i in range(int(input())):
+    n,k = map(int,input().split())
+    ar = list(map(int,input().split()))
+    mergesort(ar,n,0,n-1)
+    print(sumofpairs(ar,n,k))
+11.Finding Floor
+import sys
+def merge(ar,l,m,h): 
+    p1=l 
+    p2=m+1 
+    tmp=[0]*(h-l+1) 
+    k=0
+    while p1<=m and p2<=h: 
+        if ar[p1]<=ar[p2]: 
+            tmp[k]=ar[p1] 
+            p1+=1 
+            k+=1 
+        else: 
+            tmp[k]=ar[p2] 
+            p2+=1 
+            k+=1 
+    while(p1<=m): 
+        tmp[k]=ar[p1] 
+        p1+=1 
+        k+=1 
+    while(p2<=h): 
+        tmp[k]=ar[p2] 
+        p2+=1 
+        k+=1 
+    for i in range(len(tmp)):
+        ar[l+i]=tmp[i]
+def mergsortt(ar,l,h): 
+    if l!=h: 
+        m=(l+h)//2 
+        mergsortt(ar,l,m) 
+        mergsortt(ar,m+1,h) 
+        merge(ar,l,m,h) 
+        
+        
+def findfloor(l,k):
+    lo=0
+    h=len(l)-1
+    ans=-2147483648
+    while(lo<=h):
+        mid=(lo+h)//2
+        if l[mid]<=k:
+            ans=l[mid]
+            lo=mid+1
+        else:
+            h=mid-1
+    return ans
+        
+n=int(input())
+l=list(map(int,input().split()))
+mergsortt(l,0,len(l)-1)
+q=int(input())
+for i in range(q):
+    k=int(input())
+    print(findfloor(l,k))
+
+12.Pair with Difference K
+def mergesort(arr,n,low,high):
+    mid = (low + high)//2
+    if low == high:
+        return 0
+    else:
+        mergesort(arr,n,low,mid)
+        mergesort(arr,n,mid+1,high)
+        merge(arr,n,low,mid,high)
+def merge(arr,n,low,mid,high):
+    p1 = low
+    p2 = mid + 1
+    k = 0
+    m = high - low + 1
+    temp = [0] * m
+    while((p1<=mid) and (p2<=high)):
+        if(arr[p1]<=arr[p2]):
+            temp[k] = arr[p1]
+            k+=1
+            p1+=1
+        else:
+            temp[k] = arr[p2]
+            k+=1
+            p2+=1
+    while(p1<=mid):
+        temp[k] = arr[p1]
+        k+=1
+        p1+=1
+    while(p2<=high):
+        temp[k] = arr[p2]
+        k+=1
+        p2+=1
+    for i in range(high-low+1):
+        arr[low + i] = temp[i]
+def binarySearch(arr,n,k,low,high):
+    low = 0
+    high = n - 1
+    while(low<=high):
+        mid = (low + high)//2
+        if (arr[mid] == k):
+            return True
+        elif (arr[mid] < k):
+            low = mid + 1
+        else:
+            high = mid - 1
+def Differenceofpairs(arr,n,k):
+    p1 = 0
+    p2 = n - 1
+    for i in range(n):
+        a = arr[i]
+        b = a - k
+        if(binarySearch(arr,n,b,i+1,n-1)):
+            return True
+    return False
+for i in range(int(input())):
+    n,k = map(int,input().split())
+    ar = list(map(int,input().split()))
+    mergesort(ar,n,0,n-1)
+    if(Differenceofpairs(ar,n,k)):
+        print("true")
+    else:
+        print("false")
+
+13.Search in Rotated Sorted Array
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        low = 0
+        high = n - 1
+        while (low<=high):
+            mid = (low + high)//2
+            if (nums[mid] == target):
+                return mid
+            elif (nums[low] <= nums[mid]):
+                if (target >= nums[low] and target < nums[mid]):
+                    high = mid - 1
+                else:
+                    low = mid + 1
+            else:
+                if (target > nums[mid] and target <= nums[high]):
+                    low = mid + 1
+                else:
+                    high = mid - 1
+        return -1
+14.Search in Bitonic Array!
+A Bitonic Sequence is a sequence of numbers which is first strictly increasing then after a point strictly decreasing.
+Input 1:
+
+ A = [3, 9, 10, 20, 17, 5, 1]
+ B = 20
+o/p:-3
+Input 2:
+
+ A = [5, 6, 7, 8, 9, 10, 3, 2, 1]
+ B = 30
+o/p:- -1
+class Solution:
+    # @param A : list of integers
+    # @param B : integer
+    # @return an integer
+    
+    def solve(self, a, B):
+        l=0
+        h=len(a)-1
+        while l<=h:
+            mid=(l+h)//2
+            if a[mid]==B:
+                return mid
+            if a[mid-1]<a[mid]<a[mid+1]:
+                if a[mid]>B:
+                    h=mid-1
+                elif a[mid]<B:
+                    l=mid+1
+            else:
+                if a[mid]>B:
+                    l=mid+1
+                elif a[mid]<B:
+                    h=mid-1
+        return -1
+15.WoodCutting Made Easy!
+Problem Description
+
+There is given an integer array A of size N denoting the heights of N trees.
+
+Lumberjack Ojas needs to chop down B metres of wood. It is an easy job for him since he has a nifty new woodcutting machine that can take down forests like wildfire. However, Ojas is only allowed to cut a single row of trees.
+
+Ojas's machine works as follows: Ojas sets a height parameter H (in metres), and the machine raises a giant sawblade to that height and cuts off all tree parts higher than H (of course, trees not higher than H meters remain intact). Ojas then takes the parts that were cut off. For example, if the tree row contains trees with heights of 20, 15, 10, and 17 metres, and Ojas raises his sawblade to 15 metres, the remaining tree heights after cutting will be 15, 15, 10, and 15 metres, respectively, while Ojas will take 5 metres off the first tree and 2 metres off the fourth tree (7 metres of wood in total).
+
+Ojas is ecologically minded, so he doesn't want to cut off more wood than necessary. That's why he wants to set his sawblade as high as possible. Help Ojas find the maximum integer height of the sawblade that still allows him to cut off at least B metres of wood.
+
+NOTE:
+
+The sum of all heights will exceed B, thus Ojas will always be able to obtain the required amount of wood.
+Input 1:
+
+ A = [20, 15, 10, 17]
+ B = 7
+Input 2:
+
+ A = [4, 42, 40, 26, 46]
+ B = 20
+
+
+Example Output
+Output 1:
+
+ 15
+Output 2:
+
+ 36
+
+class Solution:
+    # @param A : list of integers
+    # @param B : integer
+    # @return an integer
+    def isvalid(self, A, B, mid):
+        chopped = 0
+        for i in A:
+            if i < mid:
+                continue
+            else:
+                chopped += (i - mid)
+                if chopped >= B:
+                    return True
+        return False
+
+    def solve(self, A, B):
+        lo = min(A)
+        hi = max(A)
+        ans = -1
+        while lo <= hi:
+            mid = lo + (hi - lo) // 2
+            if self.isvalid(A, B, mid):
+                ans = mid
+                lo = mid + 1
+            else:
+                hi = mid - 1
+        return ans
+16. Find the Reapeating and Missing Element
+def getTwoElements(arr, n):
+    
+    global x, y
+    x = 0
+    y = 0
+    
+    # Will hold xor of all elements 
+    # and numbers from 1 to n 
+    xor1 = arr[0]
+    
+    # Get the xor of all array elements
+    for i in range(1, n):
+        xor1 = xor1 ^ arr[i]
+        
+    # XOR the previous result with numbers 
+    # from 1 to n
+    for i in range(1, n + 1):
+        xor1 = xor1 ^ i
+    
+    # Will have only single set bit of xor1
+    set_bit_no = xor1 & ~(xor1 - 1)
+    
+    # Now divide elements into two 
+    # sets by comparing a rightmost set 
+    # bit of xor1 with the bit at the same 
+    # position in each element. Also, 
+    # get XORs of two sets. The two 
+    # XORs are the output elements. 
+    # The following two for loops 
+    # serve the purpose
+    for i in range(n):
+        if (arr[i] & set_bit_no) != 0:
+            
+            # arr[i] belongs to first set
+            x = x ^ arr[i]
+        else:
+            
+            # arr[i] belongs to second set
+            y = y ^ arr[i]
+            
+    for i in range(1, n + 1):
+        if (i & set_bit_no) != 0:
+            
+            # i belongs to first set
+            x = x ^ i
+        else:
+            
+            # i belongs to second set
+            y = y ^ i 
+        
+    # x and y hold the desired 
+    # output elements 
+17.Majority Element-Given an array A of N elements. Find the majority element in the array. A majority element in an array A of size N is an element that appears more than N/2 times in the array.
+N = 5 
+A[] = {3,1,3,3,2} 
+Output:
+3
+Explanation:
+Since, 3 is present more
+than N/2 times, so it is 
+the majority element.
+
+class Solution:
+    def majorityElement(self, arr, n):
+        #Your code here
+        if (n == 1):
+            return arr[0]
+        arr.sort()   
+        count, max_ele, temp, f = 1, -1, arr[0], 0
+        for i in range(1, n) :
+        
+        # increases the count if the same element occurs
+        # otherwise starts counting new element
+            if(temp == arr[i]) :
+                count += 1
+            else :
+                count = 1
+                temp = arr[i]
+            
+        # sets maximum count
+        # and stores maximum occurred element so far
+        # if maximum count becomes greater than n/2
+        # it breaks out setting the flag
+            if(max_ele < count) :
+                max_ele = count
+                ele = arr[i]
+            
+                if(max_ele > (n//2)) :
+                    f = 1
+                    break
+            
+    # returns maximum occurred element
+    # if there is no such element, returns -1
+        if f == 1 :
+            return ele
+        else :
+            return -1
+Time Complexity-O(nlogn), Space Complexity-O(1)
+
+18.Searching in an array where adjacent differ by at most k
+Input : arr[] = {4, 5, 6, 7, 6}
+           k = 1
+           x = 6
+Output : 2
+The first index of 6 is 2.
+
+Input : arr[] = {20, 40, 50, 70, 70, 60}  
+          k = 20
+          x = 60
+Output : 5
+The index of 60 is 5
+A Simple Approach is to traverse the given array one by one and compare every element with the given element ‘x’. If matches, then return index.
+The above solution can be Optimized using the fact that the difference between all adjacent elements is at most k. The idea is to start comparing from the leftmost element and find the difference between the current array element and x. Let this difference be ‘diff’. From the given property of the array, we always know that x must be at least ‘diff/k’ away, so instead of searching one by one, we jump ‘diff/k’. 
+Below is the implementation of the above idea.
+
+# Python 3 program to search an element in an array
+# where difference between adjacent elements is atmost k
+
+# x is the element to be searched in arr[0..n-1]
+# such that all elements differ by at-most k.
+def search(arr, n, x, k):
+
+	# Traverse the given array starting from
+	# leftmost element
+	i = 0
+	while (i < n):
+	
+		# If x is found at index i
+		if (arr[i] == x):
+			return i
+
+		# Jump the difference between current
+		# array element and x divided by k
+		# We use max here to make sure that i
+		# moves at-least one step ahead.
+		i = i + max(1, int(abs(arr[i] - x) / k))
+	
+
+	print("number is not present!")
+	return -1
+
+
+# Driver program to test above function
+arr = [2, 4, 5, 7, 7, 6]
+x = 6
+k = 2
+n = len(arr)
+print("Element", x, "is present at index",search(arr, n, x, k))
+
+19.Search for a Range
+Input 1:
+    A = [5, 7, 7, 8, 8, 10]
+    B = 8
+Output 1:
+    [3, 4]
+Explanation 1:
+    First occurence of 8 in A is at index 3
+    Second occurence of 8 in A is at index 4
+    ans = [3, 4]
+
+Input 2:
+    A = [5, 17, 100, 111]
+    B = 3
+Output 2:
+    [-1, -1]
+
+class Solution:
+    # @param A : tuple of integers
+    # @param B : integer
+    # @return a list of integers
+    def searchRange(self, A, B):
+        n = len(A)
+        low = 0
+        high = n - 1
+        begin = -1
+        end = -1
+        while low<=high:
+            mid = (low + high)//2
+            if A[mid] > B:
+                high = mid - 1
+            elif A[mid] < B:
+                low = mid + 1
+            else:
+                begin = mid
+                high = mid - 1
+        if begin == -1:
+            return ([-1,-1])
+        low = 0
+        high = n - 1
+        while low<=high:
+            mid = (low + high)//2
+            if A[mid] > B:
+                high = mid - 1
+            elif A[mid] < B:
+                low = mid + 1
+            else:
+                end = mid
+                low = mid + 1
+        return [begin, end]
+
+20.Find All Four Sum Numbers 
+Input:
+N = 5, K = 3
+A[] = {0,0,2,1,1}
+Output: 0 0 1 2 $
+Explanation: Sum of 0, 0, 1, 2 is equal
+to K.
+Input:
+N = 7, K = 23
+A[] = {10,2,3,4,5,7,8}
+Output: 2 3 8 10 $2 4 7 10 $3 5 7 8 $
+Explanation: Sum of 2, 3, 8, 10 = 23,
+sum of 2, 4, 7, 10 = 23 and sum of 3,
+5, 7, 8 = 23.
+
+
+def find4Numbers(A, n, X):
+
+	# Sort the array in increasing order,
+	# using library function for quick sort
+	A.sort()
+
+	# Now fix the first 2 elements one by
+	# one and find the other two elements
+	for i in range(n - 3):
+		for j in range(i + 1, n - 2):
+			
+			# Initialize two variables as indexes
+			# of the first and last elements in
+			# the remaining elements
+			l = j + 1
+			r = n - 1
+
+			# To find the remaining two elements,
+			# move the index variables (l & r)
+			# toward each other.
+			while (l < r):
+				if(A[i] + A[j] + A[l] + A[r] == X):
+					print(A[i], ",", A[j], ",",
+						A[l], ",", A[r])
+					l += 1
+					r -= 1
+				
+				elif (A[i] + A[j] + A[l] + A[r] < X):
+					l += 1
+				else: # A[i] + A[j] + A[l] + A[r] > X
+					r -= 1
+Time Complexity : O(n^3)
+
+21.Stickler Thief- According to the rule, he will never loot two consecutive houses. At the same time, he wants to maximize the amount he loots.
+n = 6
+a[] = {5,5,10,100,10,5}
+Output: 110
+Explanation: 5+100+5=110
+
+n = 3
+a[] = {1,2,3}
+Output: 4
+Explanation: 1+3=4
+arr[] = {5,  5, 10, 40, 50, 35}
+  incl = 5 
+  excl = 0
+  For i = 1 (current element is 5)
+  incl =  (excl + arr[i])  = 5
+  excl =  max(5, 0) = 5
+  For i = 2 (current element is 10)
+  incl =  (excl + arr[i]) = 15
+  excl =  max(5, 5) = 5
+  For i = 3 (current element is 40)
+  incl = (excl + arr[i]) = 45
+  excl = max(5, 15) = 15
+  For i = 4 (current element is 50)
+  incl = (excl + arr[i]) = 65
+  excl =  max(45, 15) = 45
+  For i = 5 (current element is 35)
+  incl =  (excl + arr[i]) = 80
+  excl =  max(65, 45) = 65
+And 35 is the last element. So, answer is max(incl, excl) =  80
+
+def FindMaxSum(self,a, n):
+        incl = 0
+        excl = 0
+   
+        for i in arr:
+        
+        # Current max excluding i (No ternary in 
+        # Python)
+            new_excl = excl if excl>incl else incl
+       
+        # Current max including i
+            incl = excl + i
+            excl = new_excl
+    
+    # return max of incl and excl
+        return (excl if excl>incl else incl)
+
+22.Sorted Insert Position
+Input 1:
+
+ A = [1, 3, 5, 6]
+B = 5
+Input 2:
+
+ A = [1, 3, 5, 6]
+B = 2
+
+Output 1:
+
+ 2
+Output 2:
+
+ 1
+
+Explanation 1:
+
+ 5 is found at index 2.
+Explanation 2:
+
+ 2 will be inserted ar index 1.
+
+class Solution:
+    # @param A : list of integers
+    # @param B : integer
+    # @return an integer
+    def searchInsert(self, A, B):
+        ans = 0
+        n = len(A)
+        low = 0
+        high = n - 1
+        if B < A[low]:
+            return 0
+        if B > A[high]:
+            return n
+        while low <= high:
+            mid = low + (high - low)//2
+            if (A[mid] == B):
+                return mid
+            elif (A[mid] > B):
+                ans = mid
+                high = mid - 1
+            else:
+                low = mid + 1
+        return ans 
+Alternate solution:-
+def binarysearch(A,B,low,high):
+            mid = (low + high)//2
+            while low<=high:
+                if A[mid] == B:
+                    return mid
+                elif A[mid] > B:
+                    high = mid - 1
+                elif [mid] < B:
+                    low = mid + 1
+            return -1
+        def searchInsert(self, A, B):
+            return bisect.bisect_left(A,B)
+23.Matrix Median
+Given a matrix of integers A of size N x M in which each row is sorted.
+
+Find an return the overall median of the matrix A.
+
+Note: No extra memory is allowed.
+
+Note: Rows are numbered from top to bottom and columns are numbered from left to right.
+
+Input 1:
+    A = [   [1, 3, 5],
+            [2, 6, 9],
+            [3, 6, 9]   ]
+Output 1:
+    5
+Explanation 1:
+    A = [1, 2, 3, 3, 5, 6, 6, 9, 9]
+    Median is 5. So, we return 5.
+
+Input 2:
+    A = [   [5, 17, 100]    ]
+Output 2:
+    17 ``` Matrix=
+class Solution:
+	# @param A : list of list of integers
+	# @return an integer
+	def findMedian(self, A):
+        n = len(A)
+        m = len(A[0])
+        a = []
+        for i in range(n):
+            a +=A[i]
+        a.sort()
+        return a[len(a)//2]
+Solution Approach
+We cannot use extra memory, so we can’t actually store all elements in an array and sort the array.
+But since, rows are sorted it must be of some use, right?
+
+Note that in a row you can binary search to find how many elements are smaller than a value X in O(log M).
+This is the base of our solution.
+
+Say k = N*M/2. We need to find (k + 1)^th smallest element.
+We can use binary search on answer. In O(N log M), we can count how many elements are smaller than X in the matrix.
+
+So, we use binary search on interval [1, INT_MAX]. So, total complexity is O(30 * N log M).
+
+Note:
+This problem can be solve by using min-heap, but extra memory is not allowed.
+
+24.Square Root of Integer
+Given an integer A.
+
+Compute and return the square root of A.
+
+If A is not a perfect square, return floor(sqrt(A)).
+
+DO NOT USE SQRT FUNCTION FROM STANDARD LIBRARY.
+
+NOTE: Do not use sort function from standard library. Users are expected to solve this in O(log(A)) time.
+
+Input 1:
+
+ 11
+Input 2:
+
+ 9
+
+
+Example Output
+Output 1:
+
+ 3
+Output 2:
+
+ 3
+
+
+Example Explanation
+Explanation:
+
+ When A = 11 , square root of A = 3.316. It is not a perfect square so we return the floor which is 3.
+ When A = 9 which is a perfect square of 3, so we return 3.
+
+class Solution:
+    # @param A : integer
+    # @return an integer
+    def sqrt(self, A):
+        if A == 0:
+            return 0
+        if A>=1 and A<=3:
+            return 1
+        low = 1
+        high = A//2
+        while low <= high:
+            mid = low + (high - low)//2
+            if (mid*mid == A):
+                return mid
+            elif (mid*mid < A):
+                low = mid + 1
+                val = mid
+            else:
+                high = mid - 1
+        return val
+25.Allocate Books
+Given an array of integers A of size N and an integer B.
+
+College library has N bags,the ith book has A[i] number of pages.
+
+You have to allocate books to B number of students so that maximum number of pages alloted to a student is minimum.
+
+A book will be allocated to exactly one student.
+Each student has to be allocated at least one book.
+Allotment should be in contiguous order, for example: A student cannot be allocated book 1 and book 3, skipping book 2.
+Calculate and return that minimum possible number.
+
+NOTE: Return -1 if a valid assignment is not possible.
+
+Input 1:
+    A = [12, 34, 67, 90]
+    B = 2
+Output 1:
+    113
+Explanation 1:
+    There are 2 number of students. Books can be distributed in following fashion : 
+        1) [12] and [34, 67, 90]
+        Max number of pages is allocated to student 2 with 34 + 67 + 90 = 191 pages
+        2) [12, 34] and [67, 90]
+        Max number of pages is allocated to student 2 with 67 + 90 = 157 pages 
+        3) [12, 34, 67] and [90]
+        Max number of pages is allocated to student 1 with 12 + 34 + 67 = 113 pages
+
+        Of the 3 cases, Option 3 has the minimum pages = 113.
+
+Input 2:
+    A = [5, 17, 100, 11]
+    B = 4
+Output 2:
+    100
+
+class Solution:
+	# @param A : list of integers
+	# @param B : integer
+	# @return an integer
+	def books(self, A, B):
+        n = len(A)
+        if B > n:
+            return -1
+        Sum = sum(A)
+        low = 0
+        high = Sum
+        ans = -1
+        mid = low + (high - low)//2
+        while (low <= high):
+            if(self.isPossible(A,n,B,mid)):
+                ans = mid
+                high = mid - 1
+            else:
+                low = mid + 1
+            mid = low + (high - low)//2
+        return ans
+    def isPossible(self, A, n, B, mid):
+        studentCount = 1
+        pageSum = 0
+        for i in range(n):
+            if (pageSum + A[i] <= mid):
+                pageSum+=A[i]
+            else:
+                studentCount+=1
+                if (studentCount > B or A[i] > mid):
+                    return False
+                pageSum = A[i]
+            if (studentCount > B):
+                return False
+        return True
+26.Find the cube root of the given number. Assume that all the input test cases will be a perfect cube.
+Note: Do not use any inbuilt functions/libraries for your main logic.
+Input:-5
+-27
+-125
+1000
+6859
+-19683
+Output:--3
+-5
+10
+19
+-27
+
+def cuberoot(A):
+        low = 1
+        high = A
+        while low <= high:
+            mid = (low + high)//2
+            if (mid*mid*mid == A):
+                return mid
+            elif (mid*mid*mid < A):
+                low = mid + 1
+            else:
+                high = mid - 1
+        
+        return -1
+T = int(input())
+for i in range(T):
+    N = int(input())
+    if N < 0:
+        print(-1 * cuberoot(-N))
+    else:
+        print(cuberoot(N))
+    
+27.Count triplets with sum smaller than X 
+Input: N = 4, sum = 2
+arr[] = {-2, 0, 1, 3}
+Output:  2
+Explanation: Below are triplets with 
+sum less than 2 (-2, 0, 1) and (-2, 0, 3). 
+
+Input: N = 5, sum = 12
+arr[] = {5, 1, 3, 4, 7}
+Output: 4
+Explanation: Below are triplets with 
+sum less than 12 (1, 3, 4), (1, 3, 5), 
+(1, 3, 7) and (1, 4, 5).
+
+def countTriplets(arr,n,sum):
+	arr.sort()
+	ans = 0
+	for i in range(0, n - 2):
+		j = i + 1 #low
+		k = n - 1 #high
+		while (j <= k):
+			if (arr[i] + arr[j] + arr[k] >= sum):
+				k = k - 1
+			else:
+				ans = ans + (k - j)
+				j = j + 1
+	return ans
+
+28.Forming a Magic Square
+
+import itertools
+s = []
+for i in range(3):
+    s.extend(list(map(int, input().split(" "))))
+
+min_cost = 1000
+best = None
+def is_magic(s):
+    for i in range(3):
+        if sum(s[i*3:i*3+3]) != 15:
+            return False
+        if sum(s[i::3]) != 15:
+            return False
+    if s[0] + s[4] + s[8] != 15:
+        return False
+    if s[2] + s[4] + s[6] != 15:
+        return False
+    return True
+
+best = None
+for p in itertools.permutations(range(1,10)):
+    cost = sum([abs(p[i] - s[i]) for i in range(len(s))])
+    if cost < min_cost and is_magic(p):
+        min_cost = cost
+        best = p
+        
+print(min_cost)
+
+29.Winner of the Election
+import sys
+def winnerofelection(arr, n):
+	count = [0] * (n + 1)
+	max = sys.maxint
+	winner = 0
+	for i in range(n):
+		count[ar[i]] += 1
+	for i in range(n + 1):
+		if (count[i] > max):
+			max = count[i]
+			winner = i
+	return winner
+
+30.Count Sort
+def countsort(arr, n, a, b):
+	count = [0] * (b - a + 1)
+	for i in range(n):
+		count[arr[i] - a] += 1
+	idx = 0
+	for i in range(b - a + 1):
+		for j in range(1, count[i] + 1):
+			arr[idx + 1] = i + a
+
+31.Aggressive Cows
+def valid(stalls, n, k, mid):
+	cowcount = 1
+	lastpos = stalls[0]
+	for i in range(n):
+		if (stalls[i] - lastpos >= mid):
+			cowcount += 1
+			if (cowcount == k):
+				return True
+			lastpos = stalls[i]
+	return False
+def aggressiveCows(stalls, k):
+    # Write your code here.
+	stalls.sort()
+	n = len(stalls)
+	low = 0
+	high = stalls[n - 1]
+	ans = -999999
+	mid = low + (high - low)//2
+	while (low <= high):
+		if (valid(stalls, n, k, mid)):
+			ans = mid
+			low = mid + 1
+		else:
+			high = mid - 1
+		mid = low + (high - low)//2
+	return ans
+32.Distinct elements in Window
+from collections import defaultdict
+def distinctelements(arr, n, k):
+    hash_map = defaultdict(lambda:0)
+    distinct_count = 0
+    #First Window
+    for i in range(k):
+        if (hash_map[arr[i]] == 0):
+            distinct_count += 1
+        hash_map[arr[i]] += 1
+    print(distinct_count,end = " ")
+    #Remove the first element and consider the count of next window 
+    for i in range(k, n):
+        if (hash_map[arr[i - k]] == 1):
+            distinct_count -= 1
+        hash_map[arr[i - k]] -= 1
+        if (hash_map[arr[i]] == 0):
+            distinct_count += 1
+        hash_map[arr[i]] += 1
+        print(distinct_count,end = " ")
+        
+T = int(input())
+for i in range(T):
+    N, K = map(int, input().split())
+    arr = list(map(int, input().split()))
+    distinctelements(arr, N, K)
+    print()
+
+33.Number of Valid Subarrays
+You are given a array containing only 0s and 1s . You have to tell the number of subarrays which has equal number of 0s and 1s.
+
+try:
+    def countsubarrays(arr, n):
+        hash_map = dict()
+        curr_sum = 0
+        for i in range(n):
+            curr_sum += (-1 if (arr[i] == 0) else arr[i])
+            if hash_map.get(curr_sum):
+                hash_map[curr_sum] += 1
+            else:
+                hash_map[curr_sum] = 1 
+        count = 0
+        for j in hash_map:
+            if hash_map[j] > 1:
+                count += ((hash_map[j] * int(hash_map[j] - 1)) / 2)
+        if hash_map.get(0):
+            count += hash_map[0]
+        return int(count)
+    T = int(input())
+    for i in range(T):
+        N = int(input())
+        arr = list(map(int, input().split()))
+        print(countsubarrays(arr, N))
+except:
+    pass
+
+34.Sum of Subarrays
+Given an array of integers, answer queries of the form: [i, j] : Print the sum of array elements from A[i] to A[j], both inclusive.
+
+try:
+    def subarraysum(arr, n, k, l):
+        return sum(arr[k:l+1])
+    N = int(input())
+    arr = list(map(int, input().split()))
+    Q = int(input())
+    for i in range(Q):
+        k, l = map(int, input().split())
+        print(subarraysum(arr, N, k, l))
+except:
+    pass
+
+35. Subsets of an Array
+
+def subsets(nums, N):
+    ans = []
+    def solve(index = 0, output = []):
+            #Base case
+        nums.sort()
+        if index >= N:
+            ans.append(output)
+            return
+                #Exclude
+        solve(index + 1, output)
+            #Include
+        solve(index + 1, output + [nums[index]])
+    solve()
+    return ans
+T = int(input())
+for i in range(T):
+    N = int(input())
+    arr = list(map(int, input().split()))
+    print(subsets(arr, N))
+
+36. Subsequences of String
+
+'''
+	Time complexity: O(2^N) 
+	Space complexity: O(N^2)
+	
+	where 'N' is the number of letters in the string 'STR'.
+ 
+'''
+
+
+def subsequencesHelper(s, index, temp, ans):
+
+    # Push the subsequence in ans
+    if(index == len(s)):
+
+        # If the current subsequence is not empty
+        if(len(temp) != 0):
+            ans.append(temp)
+
+        return
+
+    # Not including the current letter in subsequence
+    subsequencesHelper(s, index + 1, temp, ans)
+
+    temp += s[index]
+    # Including the current letter in subsequence
+    subsequencesHelper(s, index + 1, temp, ans)
+
+
+def subsequences(str):
+
+    # Stores length of input string
+    n = len(str)
+
+    # To store all the subsequences of str
+    ans = []
+
+    temp = ""
+
+    # Finds all possible non empty subsequences of str
+    subsequencesHelper(str, 0, temp, ans)
+
+    return ans
+
+
+Stack and its implemetation:-
+
+1. Two stacks in an array
+
+# Complete this class
+class TwoStack:
+    def __init__(self, s):
+        self.size = s
+        self.stack = [0] * self.size
+        self.top1 = -1
+        self.top2 = self.size
+
+    # Push function for the first stack
+    def push1(self, val):
+        # If overflow exists, return
+        if self.top1 + 1 == self.top2:
+            return
+        self.top1 += 1
+        self.stack[self.top1] = val
+
+    # Push function for the second stack
+    def push2(self, val):
+        # If overflow exists, return
+        if self.top2 - 1 == self.top1:
+            return
+        self.top2 -= 1
+        self.stack[self.top2] = val
+
+    # Pop function for the first stack
+    def pop1(self):
+        # If underflow exists, return -1
+        if self.top1 == -1:
+            return -1
+		#num1 = self.stack[self.top1]
+        self.top1 -= 1
+        #return num1
+        return self.stack[self.top1 + 1]
+
+    # Pop function for the second stack
+    def pop2(self):
+        # If underflow exists, return -1
+        if self.top2 == self.size:
+            return -1
+		#num2 = self.stack[self.top2]
+        self.top2 += 1
+        #return num2
+        return self.stack[self.top2 - 1]
+
+2. Delete middle element from stack
+
+try:
+	def solve(inputStack, size, count):
+		if (count == size/2):
+			inputStack.pop()
+			return
+		num = inputStack[-1]
+		inputStack.pop()
+		solve(inputStack, size, count + 1)
+		inputStack.append(num)
+	def deleteMiddle(inputStack, N):
+		count = 0
+		solve(inputStack, N, count)
+except:
+    pass
+
+3. Valid Parentheses
+
+
+def isValidParenthesis(expression):
+    s = []
+
+    # Traversing the Expression.
+    for i in range(len(expression)):
+        ch = expression[i]
+        if (ch == '(' or ch == '[' or ch == '{'):
+            # Push the element in the stack.
+            s.append(ch)
+            continue
+
+        if len(s) == 0:
+            return False
+
+        # Store the top element.
+        x = s.pop()
+
+        # Check for opening braces in stack of corresponding closing braces.
+        if expression[i] == ')':
+            if (x == '{' or x == '['):
+                return False
+
+        elif expression[i] == '}':
+            if (x == '(' or x == '['):
+                return False
+
+        elif expression[i] == ']':
+            if (x == '(' or x == '{'):
+                return False
+
+    # Check Empty Stack.
+    return len(s) == 0
+
+
+# Main Code
+
+t = int(input().strip())
+
+for i in range(t):
+    str = input().strip()
+    ans = isValidParenthesis(str)
+
+    if ans:
+        print("Balanced")
+        
+    else:
+        print("Not Balanced")
+
+4. Insert An Element At Its Bottom In A Given Stack
+
+from collections import deque
+def solve(myStack: deque, x: int):
+    if (len(myStack) == 0):
+        myStack.append(x)
+        return
+    num = myStack[-1]
+    myStack.pop()
+    solve(myStack, x)
+    myStack.append(num)
+def pushAtBottom(myStack: deque, x: int):
+    solve(myStack, x)
+    return myStack
+
+5. Reverse Stack Using Recursion
+
+from sys import stdin, setrecursionlimit
+setrecursionlimit(10**7)
+
+def insertatbottom(stack, element):
+    if (len(stack) == 0):
+        stack.append(element)
+        return
+    num = stack[-1]
+    stack.pop()
+    insertatbottom(stack, element)
+    stack.append(num)
+def reverseStack(stack) :
+    if (len(stack) == 0):
+        return
+    num = stack[-1]
+    stack.pop()
+    reverseStack(stack)
+    insertatbottom(stack, num)
+	
+# taking input
+def takeInput() :
+
+	n = int(input().strip())
+	if(n == 0) :
+		 return list(), n
+
+	stack = list(map(int,stdin.readline().strip().split(" ")))
+	return stack, n
+
+
+def printStack(stack) :
+
+	while(len(stack) > 0) :
+
+		print(stack.pop(),end = " ")
+
+
+# main
+stack, n = takeInput()
+reverseStack(stack)
+printStack(stack)
+
+6. Sort a Stack using recursion
+
+def sortedInsert(stack, num):
+    n = len(stack)
+    if (n == 0 or (n != 0 and stack[-1] < num)):
+        stack.append(num)
+        return
+    x = stack[-1]
+    stack.pop()
+    sortedInsert(stack, num)
+    stack.append(x)
+def sortStack(self, stack):
+    if (len(stack) == 0):
+        return
+    num = stack[-1]
+    stack.pop()
+    sortStack(stack)
+    sortedInset(stack, num)
+
+7. Redundant Brackets
+
+def findRedundantBrackets(s:str):
+	stack = []
+	for i in range(len(s)):
+		ch = s[i]
+		if (ch == '(' or ch == '+' or ch == '-' or ch == '*' or ch == '/'):
+			stack.append(ch)
+		else:
+			if (ch == ')'):
+				isRedundant = True
+				while (stack[-1] != '('):
+					top = stack[-1]
+					if (top == '+' or top == '-' or top == '*' or top == '/'):
+						isRedundant = False
+					stack.pop()
+				if (isRedundant == True):
+					return True
+				stack.pop()
+	return False
+
+8. The celebrity problem- Geeks for Geeks
+
+Input:
+N = 3
+M[][] = {{0 1 0},
+         {0 0 0}, 
+         {0 1 0}}
+Output: 1
+Explanation: 0th and 2nd person both
+know 1. Therefore, 1 is the celebrity. 
+
+#User function Template for python3
+
+class Solution:
+    
+    def knows(self, M, a, b, n):
+        if (M[a][b] == 1):
+            return True
+        else:
+            return False
+    #Function to find if there is a celebrity in the party or not.
+    def celebrity(self, M, n):
+        # code here 
+        stack = []
+        for i in range(n):
+            stack.append(i)
+        while (len(stack) > 1):
+            a = stack[-1]
+            stack.pop()
+            
+            b = stack[-1]
+            stack.pop()
+            
+            if (self.knows(M, a, b, n)):
+                stack.append(b)
+            else:
+                stack.append(a)
+        ans = stack[-1]
+        zeroCount = 0
+        for i in range(n):
+            if (M[ans][i] == 0):
+                zeroCount += 1
+        
+        if (zeroCount != n):
+            return -1
+        
+        #column check
+        oneCount = 1
+        for i in range(n):
+            if (M[i][ans] == 1):
+                oneCount += 1
+        
+        if (oneCount != n):
+            return -1
+        return ans
+#{ 
+#  Driver Code Starts
+#Initial Template for Python 3
+
+if __name__ == '__main__':
+    t = int(input())
+    for _ in range(t) :
+        n = int(input())
+        a = list(map(int,input().strip().split()))
+        k = 0
+        m = []
+        for i in range(n):
+            row = []
+            for j in range(n):
+                row.append(a[k])
+                k+=1
+            m.append(row)
+        ob = Solution()
+        print(ob.celebrity(m,n))
+# } Driver Code Ends
+
+Queue
+1.Queue Reversal
+
+from queue import Queue
+def rev(q):
+    #add code here
+    stack = []
+    while (not q.empty()):
+        stack.append(q.queue[0])
+        q.get()
+    while (len(stack) != 0):
+        q.put(stack[-1])
+        stack.pop()
+    return q
+
+2.First negative integer in every window of size k 
+Input : 
+N = 5
+A[] = {-8, 2, 3, -6, 10}
+K = 2
+Output : 
+-8 0 -6 -6
+Explanation :
+First negative integer for each window of size k
+{-8, 2} = -8
+{2, 3} = 0 (does not contain a negative integer)
+{3, -6} = -6
+{-6, 10} = -6
+
+from collections import deque
+def printFirstNegativeInteger( A, N, K):
+    # code here
+    dq = deque()
+    ans = [] * N
+    for i in range(K):
+        if (A[i] < 0):
+            dq.append(i)
+    if (len(dq) > 0):
+        ans.append(A[dq[0]])
+    else:
+        ans.append(0)
+    for i in range(K, N):
+        if (len(dq) != 0 and (i - dq[0]) >= K):
+            dq.popleft()
+        if (A[i] < 0):
+            dq.append(i)
+        if (len(dq) > 0):
+            ans.append(A[dq[0]])
+        else:
+            ans.append(0)
+    return ans
+
+Second Largest Element in an Array
+
+#include <stdio.h>
+
+int main() {
+    int largest, secondlargest;
+    int array[100], size, i;
+    printf("\n How many elements do you want to enter: ");
+    scanf("%d", &size);
+    printf("\nEnter %d elements: ", size);
+    for (i = 0 ; i < size; i++)
+        scanf("%d", &array[i]);
+    if (array[0] > array[1]) {
+        largest = array[0];
+        secondlargest = array[1];
+    }
+    else {
+      largest = array[1];
+      secondlargest = array[0];
+    }
+    for (i = 2; i < size; i++) {
+        if (array[i] > largest) {
+        secondlargest = largest;
+        largest = array[i];
+        }
+        else if (array[i] > secondlargest) {
+            secondlargest = array[i];
+        }
+    }
+    printf(" \nSecond largest element is %d", secondlargest);
+}

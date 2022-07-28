@@ -1,0 +1,220 @@
+1. Reverse a Linked List
+
+def reverseLinkedList(head):
+    # Write your code here.
+    #Itreative Approach
+	curr = head
+	prev = None
+	while (curr != None):
+		forward = curr.next
+		curr.next = prev
+		prev = curr
+		curr = forward
+	return prev
+    #Recursive soln
+	#if (head == None or head.next == None):
+	#	return head
+	#chotahead = reverseLinkedList(head.next)
+	#head.next.next = head
+	#head.next = None
+	#return chotahead
+
+2. Middle of Linked List
+
+def findMiddle(head):
+    # Write your code here
+    # head denoted head of linked list
+	if (head == None or head.next == None):
+		return head
+	slow = head
+	fast = head.next
+	while (fast != None):
+		fast = fast.next
+		if (fast != None):
+			fast = fast.next
+		slow = slow.next
+	return slow
+
+3. Reverse List In K Groups
+
+def kReverse(head, k):
+	if (head == None):
+		return head
+	forward = None
+	prev = None
+	curr = head
+	count = 0
+	while (curr != None and count < k):
+		forward = curr.next
+		curr.next = prev
+		prev = curr
+		curr = forward
+		count += 1
+	if (forward != None):
+		head.next = kReverse(forward, k)
+	return prev
+
+4. Detect cycle in Linked List--Use Floyd's cycle detection algorithm (fast and slow pointer technique) 
+
+def FloydDetectLoop(head :Node) -> Node:
+	if (head == None):
+		return None
+	slow = head
+	fast = head
+	while (slow != None and fast != None):
+		fast = fast.next
+		if (fast != None):
+			fast = fast.next
+		slow = slow.next
+		if (fast == slow):
+			return slow
+	return None
+
+5. Find the start node of loop in a linked list--Floyd's Algorithm + slow == Intersection approach
+
+def StartingNode(head :Node) -> Node:
+	if (head == None):
+		return None
+	intersection = FloydDetectLoop(head)
+	if (intersection == None):
+		return None
+	slow = head
+	while (slow != intersection):
+		slow = slow.next
+		intersection = intersection.next
+	return slow
+
+6. Remove cycle in Linked List
+
+def removeLoop(head):
+    if (head == None):
+        return None
+    StartOfLoop = StartingNode(head)
+    if (StartOfLoop == None):
+        return head
+    temp = StartOfLoop
+    while (temp.next != StartOfLoop):
+        temp = temp.next
+    temp.next = None
+    return head
+
+Combined Question-Detect and Remove Loop in Linked List.
+
+7. Remove Duplicates from a Sorted Linked List
+
+def uniqueSortedList(head):
+	if (head == None):
+		return None
+	curr = head
+	while (curr != None):
+		if ((curr.next != None) and curr.data == curr.next.data):
+			next_next = curr.next.next
+			node_to_delete = curr.next
+			del(node_to_delete)
+			curr.next = next_next
+		else:
+			curr = curr.next
+	return head
+
+8. Check if Linked List is Palindrome 
+
+class Solution:
+    def getMid(self, head):
+        slow = head
+        fast = head.next
+        while (fast != None and fast.next != None):
+            fast = fast.next.next
+            slow = slow.next
+        return slow
+    def reverse(self, head):
+        curr = head
+        prev = None
+        next = None
+        while (curr != None):
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+        return prev
+        
+    def isPalindrome(self, head):
+        #code here
+        if (head.next == None):
+            return True
+        #Get the Middle of the list
+        middle = self.getMid(head)
+        #Reverse the list after middle
+        temp = middle.next
+        middle.next = self.reverse(temp)
+        #Compare both the halves
+        head1 = head
+        head2 = middle.next
+        while(head2 != None):
+            if (head1.data != head2.data):
+                return 0
+            head1 = head1.next
+            head2 = head2.next
+        #Repeat step-2
+        temp = middle.next
+        middle.next = self.reverse(temp)
+        
+        return True
+        
+9. Add two numbers represented by linked lists 
+
+class Solution:
+    #Function to add two numbers represented by linked list.
+    def reverse(self, head):
+        curr = head
+        prev = None
+        forward = None
+        while (curr != None):
+            forward = curr.next
+            curr.next = prev
+            prev = curr
+            curr = forward
+        return prev
+    def insertAtTail(self, head, tail, val):
+        temp = Node(val)
+    
+        #Empty List
+        if (head == None):
+            head = temp
+            tail = temp
+            return
+        else:
+            tail.next = temp
+            tail = temp
+    def add(self, first, second):
+        carry = 0
+        ansHead = None
+        ansTail = None
+        while (first != None or second != None or carry != 0):
+            val1 = 0
+            if (first != None):
+                val1 = first.data
+            val2 = 0
+            if (second != None):
+                val2 = second.data
+            sum = carry + val1 + val2
+            digit = sum % 10
+            self.insertAtTail(ansHead, ansTail, digit)
+            carry = sum/10
+            if (first != None):
+                first = first.next
+            if (second != None):
+                second = second.next
+        return ansHead
+    def addTwoLists(self, first, second):
+        # code here
+        # return head of sum list
+        #Reverse the Linked List
+        first = self.reverse(first)
+        second = self.reverse(second)
+        #Add the 2 Linked List
+        ans = self.add(first, second)
+        #Reverse the ans
+        ans = self.reverse(ans)
+        return ans
+    
+        

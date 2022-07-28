@@ -1,0 +1,379 @@
+Easy Level Questions
+
+1. kth smallest element
+
+import heapq
+class Solution:
+    def kthSmallest(self,arr, l, r, k):
+        '''
+        arr : given array
+        l : starting x of the array i.e 0inde
+        r : ending index of the array i.e size-1
+        k : find kth smallest element and return using this function
+        '''
+        pq = []
+        for i in range(k):
+            heapq.heappush(pq, arr[i])
+            heapq._heapify_max(pq)
+        for i in range(k, r + 1):
+            if (arr[i] < pq[0]):
+                heapq.heappop(pq)
+                heapq.heappush(pq, arr[i])
+                heapq._heapify_max(pq)
+        return pq[0]
+        
+2. Is binary Tree heap ?
+
+class Solution:
+    #Your Function Should return True/False
+    def isHeap(self, root):
+        #Code Here
+        index = 0
+        totalCount = self.countNode(self, root)
+        if (self.isCBT(self, root, index, totalCount) and self.isMaxOrder(self, root)):
+            return True
+        else:
+            return False
+    def countNode(self, root):
+        if root is None:
+            return 0
+        ans = 1 + self.countNode(root.left) + self.countNode(root.right)
+        return ans
+    def isCBT(self, root, index, cnt):
+        if root is None:
+            return True
+        if (index >= cnt):
+            return False
+        else:
+            left = self.isCBT(root.left, 2 * index + 1, cnt)
+            right = self.isCBT(root.right, 2 * index + 2, cnt)
+            return (left and right)
+    def isMaxOrder(self, root):
+        if (root.left is None and root.right is None):
+            return True
+        if (root.right is None):
+            return (root.data >= root.left.data)
+        else:
+            left = self.isMaxOrder(root.left)
+            right = self.isMaxOrder(root.right)
+            return (left and right and (root.data > root.left.data and root.data > root.right.data)
+    
+3. Merge 2 binary Maxheap
+
+class Solution():
+    def heapify(self, arr, n, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+        if (left <= n and arr[largest] < arr[left]):
+            largest = left
+        if (right <= n and arr[largest] < arr[right]):
+            largest = right
+        if (largest != i):
+            arr[largest], arr[i] = arr[i], arr[largest]
+            self.heapify(arr, n, largest)
+    def buildHeap(self, arr, n):
+        for i in range(int(n / 2) -1, -1, -1):
+            self.heapify(arr, n, i)
+    def mergeHeaps(self, a, b, n, m):
+        ans = [0] * (m + n)
+        for i in range(n):
+            ans[i] = a[i]
+        for i in range(m):
+            ans[n + i] = b[i]
+        self.buildHeap(ans, n + m)
+
+4. Minimum cost of ropes
+
+import heapq
+class Solution:
+    #Function to return the minimum cost of connecting the ropes.
+    def minCost(self,arr,n) :
+        heapq.heapify(arr)
+        cost = 0
+        while (len(arr) > 1):
+            a = heapq.heappop(arr)
+            b = heapq.heappop(arr)
+            cost += a + b
+            heapq.heappush(arr, a + b)
+        return cost
+    
+5. Convert BST to MinHeap
+
+class Node:
+ 
+    # Constructor to create a new node
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+ 
+# function for the inorder traversal
+# of the tree so as to store the node
+# values in 'arr' in sorted order
+ 
+ 
+def inorderTraversal(root, arr):
+    if root == None:
+        return
+ 
+    # first recur on left subtree
+    inorderTraversal(root.left, arr)
+ 
+    # then copy the data of the node
+    arr.append(root.data)
+ 
+    # now recur for right subtree
+    inorderTraversal(root.right, arr)
+ 
+# function to convert the given
+# BST to MIN HEAP performs preorder
+# traversal of the tree
+ 
+ 
+def BSTToMinHeap(root, arr, i):
+    if root == None:
+        return
+ 
+    # first copy data at index 'i' of
+    # 'arr' to the node
+    i[0] += 1
+    root.data = arr[i[0]]
+ 
+    # then recur on left subtree
+    BSTToMinHeap(root.left, arr, i)
+ 
+    # now recur on right subtree
+    BSTToMinHeap(root.right, arr, i)
+ 
+# utility function to convert the
+# given BST to MIN HEAP
+ 
+ 
+def convertToMinHeapUtil(root):
+ 
+    # vector to store the data of
+    # all the nodes of the BST
+    arr = []
+    i = [-1]
+ 
+    # inorder traversal to populate 'arr'
+    inorderTraversal(root, arr)
+ 
+    # BST to MIN HEAP conversion
+    BSTToMinHeap(root, arr, i)
+ 
+# function for the preorder traversal
+# of the tree
+ 
+ 
+def preorderTraversal(root):
+    if root == None:
+        return
+ 
+    # first print the root's data
+    print(root.data, end=" ")
+ 
+    # then recur on left subtree
+    preorderTraversal(root.left)
+ 
+    # now recur on right subtree
+    preorderTraversal(root.right)
+
+Medium Level Questions
+ 
+6. K-th Largest Sum Subarray
+
+Approach-1
+
+def getKthLargest(arr, k):
+    SumStore = []
+    n = len(arr)
+    for i in range(0, n):
+        sum = 0
+        for j in range(i, n):
+            sum += arr[j]
+            SumStore.append(sum)
+    SumStore.sort()
+    return SumStore[len(SumStore) - k]
+	
+
+Approach-2
+
+import heapq
+def getKthLargest(arr, k):
+    mini = []
+    sum = 0
+    n = len(arr)
+    for i in range(n):
+        sum = 0
+        for j in range(i, n):
+            sum += arr[j]
+            if (len(mini) < k):
+                heapq.heappush(mini, sum)
+            else:
+                if (sum > mini[0]):
+                    heapq.heappop(mini)
+                    heapq.heappush(mini, sum)
+    return mini[0]
+                    
+7. Merge K- sorted Arrays
+
+import heapq
+def mergeKSortedArrays(kArrays, k:int):
+    minHeap = []
+    result = []
+    for i in range(0, len(kArrays)):
+        heapq.heappush(minHeap, (kArrays[i][0], i, 0))
+    while (len(minHeap) > 0):
+        curr = heapq.heappop(minHeap)
+        i = curr[1]
+        j = curr[2]
+        result.append(curr[0])
+        
+        if j + 1 < len(kArrays[i]):
+            heapq.heappush(minHeap, (kArrays[i][j + 1], i, j + 1))
+    return result
+
+8. Merge k sorted lists
+
+import heapq
+class Node:
+    def __init__(self, dat=-1,nex=None):
+        self.data = dat
+        self.next = nex
+def mergeKLists(listArray):
+    k = len(listArray)
+    if not k:
+        p = Node(-1)
+        return p
+    
+    h = [0] * k
+    
+    # Declare a priority queue.
+    helper = []
+    heapq.heapify(helper)
+    
+    for i in range (k):
+        if listArray[i].data != -1:
+            h[i] = listArray[i]
+            heapq.heappush(helper, [listArray[i].data, i])
+            
+    head, curr = None, None
+     
+    # While heap is non empty, add nodes.       
+    while helper:
+        d, ind = heapq.heappop(helper)
+        minNode = h[ind]
+        
+        if d == -1:
+            continue
+        
+        h[ind] = h[ind].next
+        heapq.heappush(helper, [minNode.next.data, ind])
+        minNode.next = None
+        
+        if head == None:
+            head = minNode
+            curr = head
+        else:
+            curr.next = minNode
+            curr = curr.next
+            
+    # Adding the end node.
+    if head:
+        p = Node(-1)
+        curr.next = p
+    else:
+        head = Node(-1)
+            
+    return head
+
+9. Median in a stream
+
+import heapq
+def signum(a, b):
+    if (a == b):
+        return 0
+    elif (a > b):
+        return 1
+    else:
+        return -1
+
+def callMedian(element, maxi, mini, median):
+    ans = signum(len(maxi), len(mini))
+    if (ans == 0):
+        if (element > median):
+            mini.append(element)
+            median = mini[0]
+        else:
+            maxi.append(element)
+            median = maxi[0]
+ 
+    elif (ans == 1):
+        if (element > median):
+            mini.append(element)
+            median = (mini[0] + maxi[0])//2
+        else:
+            mini.append(maxi[0])
+            maxi.pop()
+            maxi.append(element)
+            median = (mini[0] + maxi[0])//2
+ 
+    elif (ans == -1):
+        if (element > median):
+            maxi.append(mini[0])
+            mini.pop()
+            mini.append(element)
+            median = (mini[0] + maxi[0])//2
+        else:
+            maxi.append(element)
+            median = (mini[0] + maxi[0])//2
+
+def findMedian(arr, n):
+    ans = []
+    maxheap = []
+    minheap = []
+    median = 0
+    for i in range(0, n):
+        callMedian(arr[i], maxheap, minheap, median)
+        ans.append(median)
+    return ans
+
+10. Smallest Range From K Sorted List
+
+import heapq
+class Node:
+    def __init__(self, element = -1, row = -1, column = -1):
+        self.element = element
+        self.row = row
+        self.column = column
+def kSorted(a, k, n):
+    minHeap = []
+    mini = float('inf')
+    maxi = float('-inf')
+    for i in range(0, k):
+        element = a[i][0]
+        mini = min(mini, element)
+        maxi = max(maxi, element)
+        heapq.heappush(minHeap, [element, i, 0])
+    start = mini
+    end = maxi
+    temp = None
+    while (len(minHeap) != 0):
+        temp = minHeap[0]
+        mini = temp.element
+        if (maxi - mini < end - start):
+            start = mini
+            end = maxi
+        if (temp.column + 1 < n):
+            maxi = max(maxi, a[temp.row][temp.column + 1])
+            heapq.heappush(minHeap, [a[temp.row][temp.column + 1], temp.row, temp.column + 1])
+        else:
+            break
+    return end - start + 1
+    
+    
+
+
+ 

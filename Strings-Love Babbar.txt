@@ -1,0 +1,178 @@
+1. Reverse String
+
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        n = len(s)
+        start = 0
+        end = n - 1
+        while (start < end):
+            s[start], s[end] = s[end], s[start]
+            start += 1
+            end -= 1
+                    
+2. Check If The String Is A Palindrome
+You are given a string 'S'. Your task is to check whether the string is palindrome or not. For checking palindrome, consider alphabets and numbers only and ignore the symbols and whitespaces.
+
+'''
+	Time complexity: O((length(S))
+	Space Complexity: O(1)
+	
+	Where S is the given string. 
+'''
+
+def toLowerCase(s):
+
+    str = ""
+
+	# Traverse through the string s
+    for i in range(len(s)):
+
+        ch = s[i]
+
+		# Check if ch is a uppercase letter
+        if (ch <= 'Z' and ch >= 'A'):
+            ch = ord(ch) - (ord('A') - ord('a'))
+            ch = chr(ch)
+
+        str = str + ch
+	
+    return str
+
+def checkPalindrome(s):
+
+	# Convert uppercase letter into lowercase letter
+    s = toLowerCase(s)
+
+    i = 0
+    j = len(s) - 1
+
+    while (i < j):
+
+        if (s[i].isalnum() == False):
+
+            # ith pointer points to invalid character.
+            i += 1
+
+        elif (s[j].isalnum() == False):
+
+            # jth pointer points to invalid character.
+            j -= 1
+
+        elif (s[i] == s[j]):
+            i += 1
+            j -= 1
+
+        else:
+            return False
+
+    return True
+
+3. Maximum Occuring Character
+Input:
+str = testsample
+Output: e
+Explanation: e is the character which
+is having the highest frequency.
+Input:
+str = output
+Output: t
+Explanation:  t and u are the characters
+with the same frequency, but t is
+lexicographically smaller.
+
+class Solution:
+    
+    #Function to find the maximum occurring character in a string.
+    def getMaxOccurringChar(self,s):
+        #code here
+        n = len(s)
+        count = [0] * 26
+        for i in range(n):
+            ch = s[i]
+            number = 0
+            number = ord(ch) - ord('a')
+            count[number] += 1
+        maxi = -1
+        ans = 0
+        for i in range(26):
+            if (maxi < count[i]):
+                ans = i
+                maxi = count[i]
+        return chr(ord('a') + ans)
+
+4. Remove All Occurrences of a Substring
+Input: s = "daabcbaabcbc", part = "abc"
+Output: "dab"
+Explanation: The following operations are done:
+- s = "daabcbaabcbc", remove "abc" starting at index 2, so s = "dabaabcbc".
+- s = "dabaabcbc", remove "abc" starting at index 4, so s = "dababc".
+- s = "dababc", remove "abc" starting at index 3, so s = "dab".
+Now s has no occurrences of "abc".
+
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        n = len(s)
+        for i in range(n):
+            s = s.replace(part,"",1)
+        return s
+
+5. Replace Spaces
+
+Solution 1-
+def replaceSpaces(str):
+	temp = ""
+	n = len(str)
+	for i in range(n):
+		if (str[i] == ' '):
+			temp += "@40" 
+		else:
+			temp += str[i]
+	return temp
+
+6. Permutation in String
+
+class Solution:
+    def checkEqual(self, a, b):
+        for i in range(26):
+            if (a[i] != b[i]):
+                return 0
+        return 1
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        count1 = [0] * 26
+        #character count array
+        for i in range(len(s1)):
+            index = ord(s1[i]) - ord('a')
+            index = int(index)
+            count1[index] += 1
+        #Traverse s2 string in window of size s1 length & compare
+        i = 0
+        windowSize = len(s1)
+        count2 = [0] * 26
+        #Running for 1st window
+        while (i < windowSize and i < len(s2)):
+            index = ord(s2[i]) - ord('a')
+            index = int(index)
+            count2[index] += 1
+            i += 1
+        if (self.checkEqual(count1, count2)):
+            return 1
+        #Aage window process karo
+        while (i < len(s2)):
+            newChar = s2[i]
+            index = ord(newChar) - ord('a')
+            index = int(index)
+            count2[index] += 1
+            oldChar = s2[i - windowSize]
+            index = ord(oldChar) - ord('a')
+            index = int(index)
+            count2[index] -= 1
+            i += 1
+            if (self.checkEqual(count1, count2)):
+                return 1
+        return 0
+        
+7. String Compression
+

@@ -1,0 +1,275 @@
+1. Partial BST
+
+def isBST(root, min, max):
+    if (root == None):
+        return True
+    if (root.data >= min and root.data <= max):
+        left = isBST(root.left, min, root.data)
+        right = isBST(root.right, root.data, max)
+        return left and right
+    else:
+        return False
+def validateBST(root):
+    return isBST(root, float('-inf'), float('inf'))
+
+2.Predecessor & Successor
+
+def predecessorSuccessor(root, key):
+    temp = root
+    pred = -1
+    succ = -1
+    while (temp.data != key):
+        if (temp.data > key):
+            succ = temp.data
+            temp = temp.left
+        else:
+            pred = temp.data
+            temp = temp.right
+    leftTree = temp.left
+    while (leftTree != None):
+        pred = leftTree.data
+        leftTree = leftTree.right
+    rightTree = temp.right
+    while (rightTree != None):
+        succ = rightTree.data
+        rightTree = rightTree.left
+    return pred, succ
+
+3. Kth smallest Element
+
+def inorder(root):
+    if(root == None):
+        return []
+
+    # Call the left subtree
+    leftArr = inorder(root.left)
+
+    # Call the right subtree
+    rightArr = inorder(root.right)
+
+    return leftArr + [root.data] + rightArr
+
+
+def kthSmallest(root, k):
+
+    arr = inorder(root)
+
+    # If number of nodes in BST are less than 'k'
+    if(k > len(arr)):
+        return -1
+
+    return arr[k-1]
+
+4. LCA of 2 nodes in BST
+
+def LCAinaBST(root, P, Q):
+    if (root == None):
+        return None
+    if (root.data < P.data and root.data < Q.data):
+        return LCAinaBST(root.right, P, Q)
+    elif (root.data > P.data and root.data > Q.data):
+        return LCAinaBST(root.left, P, Q)
+    else:
+        return root
+
+5. Two Sum IV - Input is a BST
+
+def inOrder(root, inOrderArray):
+    # Base Case
+    if root == None:
+        return
+
+    inOrder(root.left, inOrderArray)
+    inOrderArray.append(root.data)
+    inOrder(root.right, inOrderArray)
+
+
+def twoSumInBST(root, target):
+    inOrderArray = []
+
+    # This inorder function stores the value of nodes in the vector inorderArray in the inorder traversal.
+    inOrder(root, inOrderArray)
+
+    # Keep two pointers i and j at the beginning and at the end of the array respectively.
+    i, j = 0, len(inOrderArray) - 1
+
+    while i < j:
+        # Finding the sum at the current pointers
+        sm = inOrderArray[i] + inOrderArray[j]
+
+        # If the sum is equal to the target value, then return true.
+        if sm == target:
+            return True
+        # If the sum exceeds the target value, then decrement j by 1.
+        elif sm > target:
+            j -= 1
+        # If the sum is less than the target value, then increment i by 1.
+        else:
+            i += 1
+
+    return False
+
+6. Flatten BST To A Sorted List
+
+def inOrder(root, inOrderArray):
+    # Base Case
+    if root == None:
+        return
+    inOrder(root.left, inOrderArray)
+    inOrderArray.append(root.data)
+    inOrder(root.right, inOrderArray)
+
+def flatten(root):
+    if (root == None):
+        return root
+    inorderVal = []
+    inOrder(root, inorderVal)
+    newRoot = TreeNode(inorderVal[0])
+    curr = newRoot
+    for i in range(1, len(inorderVal)):
+        temp = TreeNode(inorderVal[i])
+        curr.left = None
+        curr.right = temp
+        curr = temp
+    curr.left = None
+    curr.right = None
+    return newRoot
+
+
+7. Preorder traversal of a BST
+
+def solve(preorder, mini, maxi, i):
+    if (i >= len(preorder)):
+        return None
+    if (preorder[i] < mini or preorder[i] > maxi):
+        return None
+    root = preorder[i]
+    i += 1
+    root.left = solve(preorder, mini, root.data, i)
+    root.right = solve(preorder, root.data, maxi, i)
+    return root
+    
+def preorderToBST(preorder):
+    mini = float('-inf')
+    maxi = float('inf')
+    i = 0
+    return solve(preorder, mini, maxi, i)
+
+8. Merge Two BSTs
+
+def storeInOrder(root, arr):
+    if (root != None):
+        storeInOrder(root.left, arr)
+        arr.append(root.data)
+        storeInOrder(root.right, arr)
+
+# Function to merge two sorted array/lists.
+def mergeSortedArrays(arr1, arr2):
+    i = 0
+    j = 0
+    arr = []
+    
+    while (i < len(arr1) and j < len(arr2)):
+        if (arr1[i] < arr2[j]):
+            arr.append(arr1[i])
+            i += 1
+        else:
+            arr.append(arr2[j])
+            j += 1
+          
+    while (i < len(arr1)):
+        arr.append(arr1[i])
+        i += 1
+    
+    while (j < len(arr2)):
+        arr.append(arr2[j])
+        j += 1
+    
+    return arr
+
+
+# Function to convert sorted array-list to balanced BST.
+def constructBSTFromSortedArray(arr, start, end):
+    # Base case.
+    if (start > end):
+        return None
+    
+    mid = (start + end) // 2
+    
+    root = TreeNode(arr[mid])
+    root.left = constructBSTFromSortedArray(arr, start, mid - 1)
+    root.right = constructBSTFromSortedArray(arr, mid + 1, end)
+    return root
+
+
+def mergeBST(root1, root2):
+    # Store the in-order traversal of tree1 in an array.
+    temp1 = []
+    storeInOrder(root1, temp1)
+    
+    # Store the in-order traversal of tree2 in an array.
+    temp2 = []
+    storeInOrder(root2, temp2)
+    
+    # Merge the two sorted arrays.
+    final = mergeSortedArrays(temp1, temp2)
+    
+    # Construct the balanced BST from this sorted array.
+    return constructBSTFromSortedArray(final, 0, len(final) - 1)
+
+9. Size of Largest BST in Binary Tree
+
+class info:
+    def __init__(self):
+        self.isValid = True
+        self.size = 0
+        self.min = 1e9
+        self.max = -1e9
+
+    def __del__(self):
+        del self
+
+
+def maxSize(currNode, maxBST):
+
+    if currNode == None:
+        newInfo = info()
+        return newInfo
+
+
+    # Information of left and right subtrees.
+    left = maxSize(currNode.left, maxBST)
+    right = maxSize(currNode.right, maxBST)
+
+
+    currInfo = info()
+
+    # Size of current subtree.
+    currInfo.size = left.size + right.size + 1
+    
+    # Left and Right subtrees must be BST.
+    currInfo.isValid = left.isValid & right.isValid
+    
+    # Current subtree must form a BST.
+    currInfo.isValid &= (currNode.data > left.max)
+    currInfo.isValid &= (currNode.data < right.min)
+    
+    # Updating min and max for current subtree.
+    currInfo.min = min(min(left.min, right.min), currNode.data)
+    currInfo.max = max(max(left.max, right.max), currNode.data)
+
+
+    if currInfo.isValid == True:
+        maxBST[0] = max(maxBST[0], currInfo.size)
+
+    return currInfo
+
+
+def largestBST(root):
+    
+    # Passing 'maxBST' by reference.
+    maxBST = [0]
+    maxSize(root, maxBST)
+
+    return maxBST[0]
+    

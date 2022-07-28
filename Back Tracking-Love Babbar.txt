@@ -1,0 +1,115 @@
+1. Rat in a Maze problem
+
+def isValidMove(y, x, arr, visited):
+    if x == -1 or x == len(arr) or y == -1 or y == len(arr) or visited[y][x] or arr[y][x] == 0:
+        return False
+    return True
+def solve(arr, y, x, path, pathList, visited):
+    #This will check the initial point (0, 0) to start the paths
+    if (x == -1 or x == len(arr) or y == -1 or y == len(arr) or visited[y][x] or arr[y][x] == 0):
+        return
+    #If reach the last cell (n-1, n-1) then store the path and return
+    if x == len(arr) - 1 and y == len(arr) - 1:
+        pathList.append(path)
+        return
+    visited[y][x] = True
+    if isValidMove(y + 1, x, arr, visited):
+        path += 'D'
+        solve(arr, y + 1, x, path, pathList, visited)
+        path = path[:-1]
+    if isValidMove(y, x - 1, arr, visited):
+        path += 'L'
+        solve(arr, y, x - 1, path, pathList, visited)
+        path = path[:-1]
+    if isValidMove(y, x + 1, arr, visited):
+        path += 'R'
+        solve(arr, y, x + 1, path, pathList, visited)
+        path = path[:-1]
+    if isValidMove(y - 1, x, arr, visited):
+        path += 'U'
+        solve(arr, y - 1, x, path, pathList, visited)
+        path = path[:-1]
+    visited[y][x] = False
+def searchMaze(arr, n):
+    possiblePaths = []
+    path = ""
+    visited = [[False for i in range(n)]
+                      for i in range(n)]
+    solve(arr, 0, 0, path, possiblePaths, visited)
+    return possiblePaths
+
+2. N- Queen Problem
+
+def solve(col, ans, board, n):
+    #Base Case
+    if (col >= n):
+        addSolution(board, n, ans)
+        return 
+    for row in range(n):
+        if (isSafe(board, row, col)):
+            board[row][col] = 1
+            solve(col + 1, ans, board, n)
+            board[row][col] = 0
+    return
+def addSolution(board, n, ans):
+    currentAnswer = []
+    n = len(board)
+    
+    for i in range(n):
+        for j in range(n):
+            currentAnswer.append(board[i][j])
+    ans.append(currentAnswer)
+def isSafe(board, row, col):
+    for i in range(col):
+        if(board[row][i] == 1):
+            return False
+    #Upper left diagonal
+    i, j = row, col
+    while (i >= 0 and j >= 0):
+        if (board[i][j] == 1):
+            return False
+        i -= 1
+        j -= 1
+    #Lower left diagonal
+    i, j = row, col
+    while (i < len(board) and j >= 0):
+        if (board[i][j] == 1):
+            return False
+        i += 1
+        j -= 1
+    return True
+def nQueens(n):
+    board = [[0] * n for j in range(n)]
+    ans = []
+    solve(0, ans, board, n)
+    return ans
+    
+3. Sudoku Solver Problem
+
+def isSafe(sudoku, row, col, val):
+    for i in range(9):
+        if (sudoku[i][col] == val or sudoku[row][i] == val):
+            return False
+        if (sudoku[3 * (row//3) + i//3][3 * (col//3) + i % 3] == val):
+            return False
+    return True
+def solve(sudoku, row, col):
+    if (col == 9):
+        if (row == 8):
+            return True
+        col = 0
+        row += 1
+    if (sudoku[row][col] != 0):
+        return solve(sudoku, row, col + 1)
+    for val in range(1, 10):
+        if (isSafe(sudoku, row, col, val)):
+            sudoku[row][col] = val
+            if (solve(sudoku, row, col + 1)):
+                return True
+            sudoku[row][col] = 0
+    return False
+def solveSudoku(sudoku):
+    solve(sudoku, 0, 0)
+    
+   
+    

@@ -1,0 +1,89 @@
+1. Range Sum Subarrays
+Given an array of integers and a range [A,B], you have to find the number of subarrays whose sum lies in the given range inclusive.
+
+2. Consecutive Set Bits
+
+def solve(n):
+    count = 0
+    while (n != 0):
+        n = (n & (n << 1))
+        count += 1
+    return count
+T = int(input())
+for i in range(T):
+    N = int(input())
+    print(solve(N))
+
+3.Square Fun
+import math
+def solve(A, B):
+    p1 = math.floor(math.sqrt(B))
+    p2 = math.ceil(math.sqrt(A))
+    return p1 - p2 + 1
+T = int(input())
+for i in range(T):
+    A, B = list(map(int, input().split()))
+    print(solve(A, B))
+    
+4. Splitting String
+Given a string, find the minimum number of cuts needed to obtain a perfect string. A perfect string is a string in which it has only single type of character. Eg: aaaaa. A cut in the string should be done exactly in the middle dividing the string into two equal halves.
+
+Sample Input 0
+
+2
+aacabbaa
+ab
+Sample Output 0
+
+2
+1
+Explanation 0
+
+Test Case 1
+Cut-1: [aaca][bbaa], Cut-2: [bb][aa]
+
+Test Case 2
+Cut-1: [a][b]
+
+5.Sum of 2 Numbers
+Given an array, check if there exists 2 elements of the array such that their sum is equal to the sum of the remaining elements of the array.
+def solve(arr, n):
+    p1 = 0
+    p2 = n - 1
+    sum2 = 0
+    for i in range(n):
+        sum1 = arr[p1] + arr[p2]
+        for j in range(p1 + 1, p2):
+            sum2 = sum2 + arr[j]
+            if (sum1 == sum2):
+                return True
+        p1 += 1
+        p2 -= 1
+    return False
+T = int(input())
+for i in range(T):
+    N = int(input())
+    arr = list(map(int, input().split()))
+    arr.sort()
+    if (solve(arr, N)):
+        print("Yes")
+    else:
+        print("No")
+7.Ranking Books
+There are N books in a shelf which are already arranged in non-increasing order of number of pages in the books. Each book will be given a rank starting from 1 depending on the number of pages. The book with the highest number of pages will be ranked 1. You are writing a new book and it will be completed in M days. Everyday after adding some pages in your book, you want to find the rank of the book in the shelf. Please note that book's with same number of pages will be given same rank. Write an algorithm to find the rank of your book in the shelf for each of the M days.
+
+Sample Input 0
+
+2
+7
+100 100 50 40 40 20 10 
+4
+5 25 50 120 
+3
+45 30 12 
+6
+5 12 25 35 45 80
+Sample Output 0
+
+6 4 2 1 
+4 3 3 2 1 1

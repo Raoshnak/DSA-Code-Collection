@@ -1,0 +1,630 @@
+1. Count Ways To Reach The N-th Stairs
+
+Approach-1 (Top-Down Approach)
+
+MOD = 1000000007
+
+def solve(currStep, dp, nStairs):
+    if (currStep == nStairs):
+        return 1
+    if (currStep > nStairs):
+        return 0
+    if (dp[currStep] != -1):
+        return dp[currStep]
+    #climb 1 stairs
+    oneStepCount = solve(currStep + 1, dp, nStairs)
+    #climb 2 stairs
+    twoStepCount = solve(currStep + 2, dp, nStairs)
+    
+    totalCount = (oneStepCount + twoStepCount) % MOD
+    
+    dp[currStep] =  totalCount
+    
+    return  totalCount
+    
+def countDistinctWayToClimbStair(nStairs):
+    
+    dp = [-1 for i in range(nStairs + 1)]
+    ans = solve(0, dp, nStairs)
+    return ans
+
+Approach-2 (Bottom-Up Approach)
+
+MOD = 1000000007
+
+
+def countDistinctWayToClimbStair(nStairs):
+
+    dp = [-1 for i in range(nStairs+1)]
+
+    #   For single stair only
+    dp[0] = 1
+
+    #   For two stairs
+    dp[1] = 1
+
+    #   Go all stairs
+    for currStep in range(2, nStairs+1):
+        #   Get the number of way to reach currStep
+        dp[currStep] = (dp[currStep - 1] + dp[currStep - 2]) % MOD
+
+    return dp[nStairs]
+
+
+2. Min Cost Climbing Stairs
+
+Approach-1 (Top-Down Approach)
+
+class Solution:
+    def solve(self, cost, n, dp):
+        if (n == 0):
+            return cost[0]
+        if (n == 1):
+            return cost[1]
+        if (dp[n] != -1):
+            return dp[n]
+        dp[n] = cost[n] + min(self.solve(cost, n - 1, dp), self.solve(cost, n - 2, dp))
+        return dp[n]
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        n = len(cost)
+        dp = [-1 for i in range(n)]
+        ans = min(self.solve(cost, n - 1, dp), self.solve(cost, n - 2, dp))
+        return ans
+ 
+Approach-2 (Bottom-Up Approach)
+
+def solve2(self, cost, n):
+        dp = [-1 for i in range(n)]
+        dp[0] = cost[0]
+        dp[1] = cost[1]
+        for i in range(2, n):
+            dp[i] = cost[i] + min(dp[i - 1], dp[i - 2])
+        return min(dp[n - 1], dp[n - 2])
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        n = len(cost)
+        #dp = [-1 for i in range(n)]
+        #ans = min(self.solve(cost, n - 1, dp), self.solve(cost, n - 2, dp))
+        
+        return self.solve2(cost, n)
+ 
+Approach-3 (Space Optimization)
+
+def solve3(self, cost, n):
+        prev2 = cost[0]
+        prev1 = cost[1]
+        for i in range(2, n):
+            curr = cost[i] + min(prev1, prev2)
+        prev2 = prev1
+        prev1 = curr
+        return min(prev1, prev2)
+
+
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        n = len(cost)
+        #dp = [-1 for i in range(n)]
+        #ans = min(self.solve(cost, n - 1, dp), self.solve(cost, n - 2, dp))
+        
+        return self.solve3(cost, n)
+
+3. Minimum Elements
+
+Approach-1 (Recursion)
+
+def solveRec(num, x):
+    if (x == 0):
+        return 0
+    if (x < 0):
+        return float('inf')
+    mini = float('inf')
+    for i in range(len(num)):
+        ans = solveRec(num, x - num[i])
+        if (ans != float('inf')):
+            mini = min(mini, ans + 1)
+    return mini
+def minimumElements(num: List[int], x: int) -> int:
+    ans = solveRec(num, x)
+    if (ans == float('inf')):
+        return -1
+    return ans
+
+Approach-2 (Top-Down Approach)
+
+def solveMem(num, x, dp):
+    if (x == 0):
+        return 0
+    if (x < 0):
+        return float('inf')
+    if dp[x] != -1:
+        return dp[x]
+    mini = float('inf')
+    for i in range(len(num)):
+        ans = solveMem(num, x - num[i], dp)
+        if (ans != float('inf')):
+            mini = min(mini, ans + 1)
+    dp[x] = mini
+    return mini
+def minimumElements(num: List[int], x: int) -> int:
+    dp = [-1 for i in range(x + 1)]
+    ans = solveMem(num, x, dp)
+    if (ans == float('inf')):
+        return -1
+    else:
+        return ans
+    
+Approach-3 (Bottom-Up Approach)
+
+def minimumElements(num: List[int], x: int) -> int:
+    n = len(num)
+    
+    dp = [float('inf') for i in range(x + 1)]
+    
+    dp[0] = 0
+    
+    for i in range(1, x + 1):
+        for j in range(n):
+            if (i - num[j] >= 0 and dp[i - num[j]] != float('inf')):
+                dp[i] = min(dp[i], 1 + dp[i - num[j]])
+    if dp[x] == float('inf'):
+        return -1
+    return dp[x]
+
+4. Maximum sum of non-adjacent elements
+
+#Space Optimization
+def solve(nums):
+    n = len(nums)
+    
+    prev2 = 0
+    prev1 = nums[0]
+    
+    for i in range(1, n):
+        inclu = prev2 + nums[i]
+        exclu = prev1 + 0
+        ans = max(inclu, exclu)
+        prev2 = prev1
+        prev1 = ans
+    return prev1
+'''#Memoization Approach
+    def solveMem(nums, n, dp):
+    if (n < 0):
+        return 0
+    if (n == 0):
+        return nums[0]
+    if (dp[n] != -1):
+        return dp[n]
+    inclu = solveMem(nums, n - 2) + nums[n]
+    exclu = solveMem(nums, n - 1) + 0
+    dp[n] = max(inclu, exclu)
+    return dp[n]'''
+'''Recursion Approach
+    def solve(nums, n):
+    if (n < 0):
+        return 0
+    if (n == 0):
+        return nums[0]
+    inclu = solve(nums, n - 2) + nums[n]
+    exclu = solve(nums, n - 1) + 0
+    return max(inclu, exclu)'''
+def maximumNonAdjacentSum(nums):
+    '''n = len(nums)
+    ans = solve(nums, n - 1)
+    return ans'''
+    
+    '''n = len(nums)
+    dp = [-1 for i in range(n)]
+    solveMem(nums, n - 1, dp)'''
+    
+    '''# Tabulation Method
+    n = len(nums)
+    
+    if (n < 0):
+        return 0
+    
+    dp = [0] * (n)
+    
+    dp[0] = nums[0]
+    
+    for i in range(1, n):
+        inclu = dp[i - 2] + nums[i]
+        exclu = dp[i - 1] + 0 
+        dp[i] = max(inclu, exclu)
+    return dp[n - 1]'''
+    
+    return solve(nums)
+
+5. House Robber II
+
+-->Houses are arranged in a circle
+-->First and last house are neighbours
+-->Each adjacent house has a security system in it
+-->If 2 adjacent houses are broken then police is called
+-->We have to rob non-adjacent houses in such a way that we get maximum money
+
+#Space Optimization
+def solve(nums):
+    n = len(nums)
+    
+    prev2 = 0
+    prev1 = nums[0]
+    
+    for i in range(1, n):
+        inclu = prev2 + nums[i]
+        exclu = prev1 + 0
+        ans = max(inclu, exclu)
+        prev2 = prev1
+        prev1 = ans
+    return prev1
+
+def houseRobber(valueInHouse):
+    n = len(valueInHouse)
+    if (n == 1):
+        return valueInHouse[0]
+    first = [] * n
+    second = [] * n
+    for i in range(n):
+        if (i != n - 1):
+            first.append(valueInHouse[i])
+        if (i != 0):
+            second.append(valueInHouse[i])
+    return max(solve(first), solve(second))
+
+Time Complexity- O(N)
+Space Complexity-O(N) (Bcz of first and second array declaration)
+
+6. Cut Into Segments
+
+Approach-1(Recursion)
+
+def solve(n, x, y, z):
+    if (n == 0):
+        return 0
+    if (n < 0):
+        return float('-inf')
+    a = solve(n - x, x, y, z) + 1
+    b = solve(n - y, x, y, z) + 1
+    c = solve(n - z, x, y, z) + 1
+    ans = max(a, max(b, c))
+    return ans
+def cutSegments(n, x, y, z):
+    ans = solve(n, x, y, z)
+    if (ans < 0):
+        return 0
+    else:
+        return ans
+    
+
+Approach-2(Recursion + Memoization)
+
+def solveMem(n, x, y, z, dp):
+    if (n == 0):
+        return 0
+    if (n < 0):
+        return float('-inf')
+    if (dp[n] != -1):
+        return dp[n]
+    a = solveMem(n - x, x, y, z, dp) + 1
+    b = solveMem(n - y, x, y, z, dp) + 1
+    c = solveMem(n - z, x, y, z, dp) + 1
+    dp[n] = max(a, max(b, c))
+    return dp[n]
+def cutSegments(n, x, y, z):
+    dp = [-1 for i in range(n)]
+    ans = solveMem(n, x, y, z, dp)
+    return ans
+
+Approach-3(Tabulation)
+
+def cutSegments(n, x, y, z):
+    dp = [-1] * (n + 1)
+
+    # For length 0 there will be 0 cuts.
+    dp[0] = 0
+
+    for i in range(1, n + 1):
+    
+        # Checking if 'i' greater than 'X' and if 'i - X' length rod can be cut into segments.
+        if (i - x >= 0 and dp[i - x] != -1):
+            dp[i] = max(dp[i], dp[i - x] + 1)
+        
+        # Checking if 'i' greater than 'Y' and if 'i - Y' length rod can be cut into segments.
+        if (i - y >= 0 and dp[i - y] != -1):
+            dp[i] = max(dp[i], dp[i - y] + 1)
+        
+        # Checking if 'i' greater than 'Z' and if 'i - Z' length rod can be cut into segments.
+        if (i - z >= 0 and dp[i - z] != -1):
+            dp[i] = max(dp[i], dp[i - z] + 1)
+        
+    # If 'N' length rod cannot be cut into segments return 0 else return 'DP[N]'.
+    if (dp[n] == -1):
+        return 0
+    else:
+        return dp[n]
+
+7. Count derangements
+
+Approach-1(Recursion)
+
+MOD = 1000000007
+def countDerangements(n):
+    # Base conditions.
+    if n == 1:
+        return 0
+
+    if n == 2:
+        return 1
+
+    # Recurse for other subproblems.
+    return ((n - 1) % MOD * (countDerangements(n - 1) % MOD + countDerangements(n - 2) % MOD) % MOD) % MOD
+
+Approach-2(Recursion + Memoization)
+
+
+MOD = 1000000007
+def solveMem(n, dp):
+    if n == 1:
+        return 0
+
+    if n == 2:
+        return 1
+    
+    if (dp[n] != -1):
+        return dp[n]
+
+    # Recurse for other subproblems.
+    dp[n] = ((n - 1) % MOD * (solveMem(n - 1, dp) % MOD + solveMem(n - 2, dp) % MOD) % MOD) % MOD
+    
+    return dp[n]
+def countDerangements(n):
+    dp = [-1] * (n + 1)
+    return solveMem(n, dp)
+    
+
+Approach-3(Tabulation)
+
+MOD = 1000000007
+def countDerangements(n):
+    dp = [-1] * (n + 1)
+    dp[1] = 0
+    dp[2] = 1
+    for i in range(3, n + 1):
+        first = dp[i - 1] % MOD
+        second = dp[i - 2] % MOD
+        sum = (first + second) % MOD
+        ans = ((i - 1) * sum) % MOD
+        dp[i] = ans
+    return dp[n]
+
+Approach-4(Space Optimization)
+
+MOD = 1000000007
+def countDerangements(n):
+    dp = [-1] * (n + 1)
+    prev2 = 0
+    prev1 = 1
+    for i in range(3, n + 1):
+        first = prev2 % MOD
+        second = prev1 % MOD
+        sum = (first + second) % MOD
+        ans = ((i - 1) * sum) % MOD
+        prev2 = prev1
+        prev1 = ans
+    return prev1
+
+8. Painting Fence Algorithm (Ninja and Fence Problem)
+
+Approach-1(Recursion + Memoization)
+
+MOD = 1000000007
+def add(a, b):
+    return ((a % MOD) + (b % MOD)) % MOD
+def mul(a, b):
+    return ((a % MOD) * (b % MOD)) % MOD
+def solveMem(n, k, dp):
+    if (n == 1):
+        return k
+    if (n == 2):
+        return add(k, mul(k, k - 1))
+    if (dp[n] != -1):
+        return dp[n]
+    dp[n] = add(mul(solveMem(n - 2, k, dp), k - 1), mul(solveMem(n - 1, k, dp), k - 1))
+    return dp[n]
+def numberOfWays(n: int, k: int) -> int:
+    dp = [-1] * (n + 1)
+    return solveMem(n, k, dp)  
+
+Approach-2(Tabulation)
+
+MOD = 1000000007
+def add(a, b):
+    return ((a % MOD) + (b % MOD)) % MOD
+def mul(a, b):
+    return ((a % MOD) * (b % MOD)) % MOD
+def solveTab(n, k):
+    dp = [-1 for i in range(n + 2)]
+    
+    dp[1] = k
+    dp[2] = add(k, mul(k, k - 1))
+    
+    for i in range(3, n + 1):
+        dp[i] = add(mul(dp[i - 2], k - 1), mul(dp[i - 1], k - 1))
+    return dp[n]
+def numberOfWays(n: int, k: int) -> int:
+    return solveTab(n, k)    
+
+Approach-3(Space Optimization)
+
+MOD = 1000000007
+def add(a, b):
+    return ((a % MOD) + (b % MOD)) % MOD
+def mul(a, b):
+    return ((a % MOD) * (b % MOD)) % MOD
+def solveSO(n, k):
+  
+    prev2 = k
+    prev1 = add(k, mul(k, k - 1))
+    
+    for i in range(3, n + 1):
+        ans = add(mul(prev2, k - 1), mul(prev1, k - 1))
+        prev2 = prev1
+        prev1 = ans
+    return prev1
+def numberOfWays(n: int, k: int) -> int:
+    return solveSO(n, k)    
+
+9. Combination Sum IV
+
+Approach-1(Recursion + Memoization)
+
+def solveMem(num, target, dp):
+    if (target < 0):
+        return 0
+    if (target == 0):
+        return 1
+    if (dp[target] != -1):
+        return dp[target]
+    ans = 0
+    for i in range(len(num)):
+        ans = ans + solveMem(num, target - num[i], dp)
+    dp[target] = ans
+    return dp[target]
+def findWays(num: List[int], tar: int) -> int:
+    dp = [-1 for i in range(tar + 1)]
+    return solveMem(num, tar, dp)
+
+Approach-2 (Tabulation)
+
+def solveTab(num, target):
+    dp = [0 for i in range(target + 1)]
+    dp[0] = 1
+    for i in range(1, target + 1):
+        for j in range(len(num)):
+            if (i - num[j] >= 0):
+                dp[i] = dp[i] + dp[i - num[j]]
+    return dp[target]
+def findWays(num: List[int], tar: int) -> int:
+    return solveTab(num, tar)
+
+Here space optimization is not possible as the dp array depends on dp[i - num[j]] and here we exactly don't know on how many blocks it depends on
+
+10. Perfect Square Problem
+
+Approach-1 (Recursion + Memoization)
+
+class Solution:
+    def solveMem(self, n, dp):
+        if (n == 0):
+            return 0
+        if (dp[n] != -1):
+            return dp[n]
+        ans = n
+        i = 1
+        while (i * i <= n):
+            temp = i * i
+            ans = min(ans, 1 + self.solveMem(n - temp, dp))
+            i += 1
+        dp[n] = ans
+        return dp[n]
+	def MinSquares(self, n):
+		# Code here
+		dp = [-1 for i in range(n + 1)]
+		return self.solveMem(n, dp)
+
+11. Minimum cost for Tickets
+
+Approach-1 (Tabulation)
+
+def solveTab(n, days, costs):
+    dp = [0 for i in range(n + 1)]
+    dp[n] = 0
+    for i in range(n - 1, -1, -1):
+        dp[i] = float('inf')
+        
+        # For a 1-day pass
+        j = i
+        while (j < n and days[j] < days[i] + 1):
+            j += 1
+        dp[i] = min(dp[i], dp[j] + costs[0])
+        
+         # For a 7-days pass
+        j = i
+        while (j < n and days[j] < days[i] + 7):
+            j += 1
+        dp[i] = min(dp[i], dp[j] + costs[1])
+        
+         # For a 30-days pass
+        j = i
+        while (j < n and days[j] < days[i] + 30):
+            j += 1
+        dp[i] = min(dp[i], dp[j] + costs[2])
+        
+    return dp[0]
+        
+def minimumCoins(n, days, costs):
+    return solveTab(n, days, costs)
+
+
+12.  Minimum Score Triangulation of Polygon
+
+Approach-1 (Recursion)
+
+class Solution:
+    def solve(self, v, i, j):
+        if (i + 1 == j):
+            return 0
+        ans = float('inf')
+        for k in range(i + 1, j):
+            ans = min(ans, v[i] * v[j] * v[k] + self.solve(v, i, k) + self.solve(v, k, j))
+        return ans
+    def minScoreTriangulation(self, values: List[int]) -> int:
+        n = len(values)
+        return self.solve(values, 0, n - 1)
+
+Approach-2 (Recursion + Memoization)
+
+class Solution:
+    def solveMem(self, v, i, j, dp):
+        if (i + 1 == j):
+            return 0
+        if (dp[i][j] != -1):
+            return dp[i][j]
+        ans = float('inf')
+        for k in range(i + 1, j):
+            ans = min(ans, v[i] * v[j] * v[k] + self.solveMem(v, i, k, dp) + self.solveMem(v, k, j, dp))
+        dp[i][j] = ans
+        return dp[i][j]
+    def minScoreTriangulation(self, values: List[int]) -> int:
+        n = len(values)
+        dp = [[-1 for i in range(n)] for i in range(n)]
+        return self.solveMem(values, 0, n - 1, dp)
+        
+Approach-3 (Tabulation)
+
+class Solution:
+    def solveTab(self, v):
+        n = len(v)
+        dp = [[0 for i in range(n)] for i in range(n)]
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 2, n):
+                dp[i][j] = float('inf')
+                for k in range(i + 1, j):
+                    dp[i][j] = min(dp[i][j], v[i] * v[j] * v[k] + dp[i][k] + dp[k][j])
+                #dp[i][j] = ans
+        return dp[0][n - 1]
+    def minScoreTriangulation(self, values: List[int]) -> int:
+        return self.solveTab(values)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
